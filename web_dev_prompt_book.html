@@ -472,6 +472,50 @@
   .tag-perf { background: rgba(34,197,94,0.15); color: #4ade80; }
   .tag-debug { background: rgba(251,146,60,0.15); color: #fb923c; }
   .tag-arch { background: rgba(192,132,252,0.15); color: #c084fc; }
+  .tag-a11y { background: rgba(14,165,233,0.15); color: #0ea5e9; }
+  .tag-sec { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .tag-ai { background: rgba(236,72,153,0.15); color: #ec4899; }
+  .tag-starter { background: rgba(20,184,166,0.15); color: #14b8a6; }
+  .tag-oneshot { background: rgba(234,179,8,0.15); color: #eab308; }
+  .tag-workflow { background: rgba(99,102,241,0.15); color: #6366f1; }
+  .tag-beginner { background: rgba(74,222,128,0.15); color: #4ade80; }
+  .tag-advanced { background: rgba(251,146,60,0.15); color: #fb923c; }
+
+  /* SKILL LEVEL BADGES */
+  .level-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .level-beginner { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+  .level-advanced { background: rgba(251,146,60,0.12); color: #fb923c; border: 1px solid rgba(251,146,60,0.25); }
+
+  .exercise-step {
+    padding: 14px 18px;
+    border-left: 3px solid var(--border);
+    margin: 10px 0;
+    font-size: 13px;
+    color: var(--muted);
+    transition: border-color 0.2s;
+  }
+  .exercise-step:hover { border-left-color: var(--accent); }
+  .exercise-step strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 14px; }
+  .exercise-step code { color: var(--accent); background: rgba(0,255,136,0.08); padding: 1px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  .vs-card {
+    display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0; align-items: stretch;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin: 16px 0;
+  }
+  .vs-bad, .vs-good { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; }
+  .vs-bad { background: rgba(244,63,94,0.05); color: #fca5a5; }
+  .vs-good { background: rgba(74,222,128,0.05); color: #86efac; }
+  .vs-divider { display: flex; align-items: center; justify-content: center; background: var(--surface2); font-family: 'Syne', sans-serif; font-weight: 800; color: var(--muted); font-size: 14px; }
+  .vs-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 8px; }
+  .vs-label.bad { color: #f43f5e; }
+  .vs-label.good { color: #22c55e; }
 
   @media (max-width: 900px) {
     .sidebar { transform: translateX(-100%); }
@@ -502,6 +546,14 @@
     <span class="nav-dot"></span> Prompting Tips
   </a>
 
+  <div class="nav-section">Learn Prompting</div>
+  <a class="nav-item" onclick="showSection('beginner')" href="#">
+    <span class="nav-dot"></span> Prompt 101 <span class="nav-badge" style="background:rgba(74,222,128,0.2);color:#4ade80">New</span>
+  </a>
+  <a class="nav-item" onclick="showSection('advanced')" href="#">
+    <span class="nav-dot"></span> Advanced Lab <span class="nav-badge" style="background:rgba(251,146,60,0.2);color:#fb923c">Pro</span>
+  </a>
+
   <div class="nav-section">Chapters</div>
   <a class="nav-item" onclick="showSection('html')" href="#">
     <span class="nav-dot"></span> HTML & Structure <span class="nav-badge">8</span>
@@ -527,6 +579,26 @@
   <a class="nav-item" onclick="showSection('arch')" href="#">
     <span class="nav-dot"></span> Architecture & DX <span class="nav-badge">7</span>
   </a>
+  <a class="nav-item" onclick="showSection('a11y')" href="#">
+    <span class="nav-dot"></span> UI/UX & Accessibility <span class="nav-badge">5</span>
+  </a>
+  <a class="nav-item" onclick="showSection('sec')" href="#">
+    <span class="nav-dot"></span> Security & AppSec <span class="nav-badge">5</span>
+  </a>
+  <a class="nav-item" onclick="showSection('ai')" href="#">
+    <span class="nav-dot"></span> AI & LLM Integration <span class="nav-badge">5</span>
+  </a>
+
+  <div class="nav-section">Zero-Effort Dev</div>
+  <a class="nav-item" onclick="showSection('starter')" href="#">
+    <span class="nav-dot"></span> Copy-Paste Starters <span class="nav-badge">5</span>
+  </a>
+  <a class="nav-item" onclick="showSection('oneshot')" href="#">
+    <span class="nav-dot"></span> One-Shot Full Stack <span class="nav-badge">5</span>
+  </a>
+  <a class="nav-item" onclick="showSection('workflow')" href="#">
+    <span class="nav-dot"></span> Workflow Automation <span class="nav-badge">5</span>
+  </a>
 
   <div class="nav-section">Reference</div>
   <a class="nav-item" onclick="showSection('cheatsheet')" href="#">
@@ -546,15 +618,15 @@
       <span class="line3">Prompt Better.</span>
     </h1>
     <p class="hero-desc">
-      61 production-ready AI prompts crafted specifically for frontend and fullstack web developers. From semantic HTML to system architecture — every prompt is optimized for maximum output quality.
+      103 production-ready AI prompts crafted specifically for frontend and fullstack web developers. From your first prompt to advanced chain-of-thought engineering — every prompt is optimized for maximum output quality.
     </p>
     <div class="hero-stats">
       <div class="stat-item">
-        <div class="stat-num">61</div>
+        <div class="stat-num">103</div>
         <div class="stat-label">Prompts</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">8</div>
+        <div class="stat-num">16</div>
         <div class="stat-label">Categories</div>
       </div>
       <div class="stat-item">
@@ -599,6 +671,12 @@
           <tr><td>🚀 Performance & SEO</td><td>Optimization, Core Web Vitals, meta tags, caching</td><td>7</td></tr>
           <tr><td>🐛 Debugging & Review</td><td>Code review, bug fixing, refactoring, testing</td><td>7</td></tr>
           <tr><td>🏛️ Architecture & DX</td><td>System design, folder structure, CI/CD, docs</td><td>7</td></tr>
+          <tr><td>♿ UI/UX & Accessibility</td><td>WCAG compliance, design systems, microcopy</td><td>5</td></tr>
+          <tr><td>🛡️ Security & AppSec</td><td>Threat modeling, zero-trust, auth, OWASP fixes</td><td>5</td></tr>
+          <tr><td>🤖 AI & LLM Integration</td><td>RAG, streaming UI, structured output, agents</td><td>5</td></tr>
+          <tr><td>📋 Copy-Paste Starters</td><td>Instant project scaffolds, boilerplate generators</td><td>5</td></tr>
+          <tr><td>🎯 One-Shot Full Stack</td><td>Complete features in a single prompt</td><td>5</td></tr>
+          <tr><td>🔧 Workflow Automation</td><td>Git hooks, scripts, CI pipelines, dev tooling</td><td>5</td></tr>
         </tbody>
       </table>
 
@@ -616,8 +694,13 @@
         <div class="section-icon" style="background:rgba(124,58,237,0.15)">🧠</div>
         <div>
           <div class="section-title">Prompting Tips for Developers</div>
-          <div class="section-desc">The techniques that separate average prompts from expert-level ones</div>
+          <div class="section-desc">12 battle-tested techniques used by FAANG prompt engineers to get 10x better output</div>
         </div>
+      </div>
+
+      <div class="tip-box green" style="margin-bottom:28px">
+        <strong>🚀 The Zero-Effort Philosophy</strong>
+        The best prompt is one you send <b>once</b> and get production-ready code back. Every tip below is designed to eliminate back-and-forth. Master these patterns and you'll ship features in minutes, not hours.
       </div>
 
       <div class="prompts-grid">
@@ -709,6 +792,147 @@
             </div>
           </div>
         </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T7</span>
+            <span class="card-title">The Mega-Prompt Blueprint</span>
+            <span class="card-tag tag-starter">Zero-Effort</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Get a complete, deployable feature in a single prompt</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">MEGA PATTERN</span></div>
+              <div class="prompt-text"><span class="keyword">Structure every complex request like this:</span>
+
+1. <span class="keyword">ROLE:</span> "Act as a staff engineer at Google..."
+2. <span class="keyword">CONTEXT:</span> "I'm building [X] with [stack]. Here's my existing code: ..."
+3. <span class="keyword">TASK:</span> "Build [specific feature] with these exact requirements: ..."
+4. <span class="keyword">CONSTRAINTS:</span> "Must use TypeScript strict, no 'any', include error handling..."
+5. <span class="keyword">OUTPUT FORMAT:</span> "Return each file separately with its path as a header."
+6. <span class="keyword">VERIFICATION:</span> "Include a test file that validates the feature works."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T8</span>
+            <span class="card-title">Chain-of-Thought Forcing</span>
+            <span class="card-tag tag-ai">Advanced</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Make the AI reason through complex problems step-by-step before coding</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">THINKING PATTERN</span></div>
+              <div class="prompt-text">"Before writing any code, <span class="keyword">think step by step</span>:
+1. What are the edge cases?
+2. What data structures are optimal?
+3. What could go wrong in production?
+
+Then write the implementation based on your analysis."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T9</span>
+            <span class="card-title">The File-Per-File Pattern</span>
+            <span class="card-tag tag-arch">Organization</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Get multi-file output that's instantly copy-pasteable</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">OUTPUT PATTERN</span></div>
+              <div class="prompt-text">"<span class="keyword">Return each file separately</span> using this format:
+
+<span class="comment">// === FILE: src/components/Button.tsx ===</span>
+[code here]
+
+<span class="comment">// === FILE: src/hooks/useAuth.ts ===</span>
+[code here]
+
+Include ALL files needed to make this feature work. Don't skip imports."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T10</span>
+            <span class="card-title">Negative Constraints</span>
+            <span class="card-tag tag-sec">Guard Rails</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Tell the AI what NOT to do — eliminates the most common bad outputs</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">CONSTRAINT PATTERN</span></div>
+              <div class="prompt-text"><span class="keyword">Append a "DO NOT" block to any prompt:</span>
+
+"Do NOT:
+- Use <span class="placeholder">any</span> or <span class="placeholder">as unknown</span> in TypeScript
+- Use <span class="placeholder">useEffect</span> for data fetching (use React Query / SWR)
+- Store secrets in <span class="placeholder">localStorage</span>
+- Use <span class="placeholder">innerHTML</span> — always sanitize
+- Return placeholder or TODO comments — all code must be complete"</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T11</span>
+            <span class="card-title">The Persona Escalation</span>
+            <span class="card-tag tag-oneshot">Power Move</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Dramatically increase code quality by specifying expertise level</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PERSONA PATTERN</span></div>
+              <div class="prompt-text"><span class="keyword">Escalate the role for harder tasks:</span>
+
+<span class="comment">// Easy task:</span> "Act as a frontend developer..."
+<span class="comment">// Medium task:</span> "Act as a senior React engineer at Vercel..."
+<span class="comment">// Hard task:</span> "Act as a staff engineer at Google who has been on the <span class="placeholder">[Chrome DevTools / V8]</span> team for 8 years..."
+<span class="comment">// Expert task:</span> "Act as the technical lead who wrote the <span class="placeholder">[React reconciler / Next.js App Router]</span>..."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T12</span>
+            <span class="card-title">The Diff-Only Follow-Up</span>
+            <span class="card-tag tag-workflow">Efficiency</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Save tokens and time on follow-up edits</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">FOLLOW-UP PATTERN</span></div>
+              <div class="prompt-text"><span class="keyword">After the first response, ask for changes as diffs:</span>
+
+"Now add <span class="placeholder">[feature]</span>. <span class="keyword">Show only the changed lines</span> in unified diff format (with + and - prefixes). Do NOT repeat unchanged code. Include the filename and line numbers for each change."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glow-line"></div>
+
+      <div class="tip-box blue">
+        <strong>🎯 The FAANG Prompt Engineer's Golden Rule</strong>
+        The #1 mistake developers make is being too vague. "Build me a login form" gets you garbage. "Build a login form with email + password using React Hook Form, Zod validation, shadcn/ui components, that calls my /api/auth/login endpoint and stores the JWT in an HTTP-only cookie" gets you production code. <b>Specificity is the multiplier.</b>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="section-title" style="font-size:20px;margin-bottom:16px">Anti-Patterns to Avoid</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:16px">These common mistakes waste your time and produce poor results:</p>
+        <table class="ref-table">
+          <thead><tr><th>❌ Bad Habit</th><th>✅ Fix</th></tr></thead>
+          <tbody>
+            <tr><td>"Build me a dashboard"</td><td>Specify what data, how many widgets, what charts, what framework</td></tr>
+            <tr><td>Asking one question at a time</td><td>Batch all requirements into one mega-prompt</td></tr>
+            <tr><td>Accepting the first output</td><td>Always run the Critique Loop (T6) at least once</td></tr>
+            <tr><td>Not providing existing code</td><td>Paste your types, schemas, and existing patterns</td></tr>
+            <tr><td>Saying "make it better"</td><td>Say exactly WHAT to improve: performance, readability, error handling</td></tr>
+            <tr><td>Ignoring the DO NOT list</td><td>Negative constraints (T10) eliminate 80% of bad output</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -808,6 +1032,166 @@
       <div class="prompts-grid" id="prompts-arch"></div>
     </div>
 
+    <!-- UI/UX & ACCESSIBILITY SECTION -->
+    <div class="section" id="section-a11y">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(14,165,233,0.1)">♿</div>
+        <div>
+          <div class="section-title">UI/UX & Accessibility</div>
+          <div class="section-desc">WCAG compliance, user flows, design systems, and microcopy</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-a11y"></div>
+    </div>
+
+    <!-- SECURITY SECTION -->
+    <div class="section" id="section-sec">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(220,38,38,0.1)">🛡️</div>
+        <div>
+          <div class="section-title">Security & AppSec</div>
+          <div class="section-desc">Threat modeling, zero-trust architecture, authentication, and proactive vulnerability mitigation</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-sec"></div>
+    </div>
+
+    <!-- AI SECTION -->
+    <div class="section" id="section-ai">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(236,72,153,0.1)">🤖</div>
+        <div>
+          <div class="section-title">AI & LLM Integration</div>
+          <div class="section-desc">RAG architectures, streaming responses, structured data extraction, and AI UI patterns</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-ai"></div>
+    </div>
+
+    <!-- COPY-PASTE STARTERS SECTION -->
+    <div class="section" id="section-starter">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(20,184,166,0.1)">📋</div>
+        <div>
+          <div class="section-title">Copy-Paste Starters</div>
+          <div class="section-desc">Instant project scaffolds and boilerplates — paste one prompt, get a running codebase</div>
+        </div>
+      </div>
+      <div class="tip-box green" style="margin-bottom:20px">
+        <strong>⚡ Zero-Effort Promise</strong>
+        Every prompt in this section is designed to produce code you can paste directly into your project and run. No modifications needed. Just fill in the [placeholders] and go.
+      </div>
+      <div class="prompts-grid" id="prompts-starter"></div>
+    </div>
+
+    <!-- ONE-SHOT FULL STACK SECTION -->
+    <div class="section" id="section-oneshot">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(234,179,8,0.1)">🎯</div>
+        <div>
+          <div class="section-title">One-Shot Full Stack</div>
+          <div class="section-desc">Complete features — frontend + backend + database — in a single prompt</div>
+        </div>
+      </div>
+      <div class="tip-box yellow" style="margin-bottom:20px">
+        <strong>🎯 One Prompt = One Feature</strong>
+        These prompts are engineered to produce an entire vertical slice of a feature: the UI component, the API route, the database query, and the TypeScript types — all wired together and ready to ship.
+      </div>
+      <div class="prompts-grid" id="prompts-oneshot"></div>
+    </div>
+
+    <!-- WORKFLOW AUTOMATION SECTION -->
+    <div class="section" id="section-workflow">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(99,102,241,0.1)">🔧</div>
+        <div>
+          <div class="section-title">Workflow Automation</div>
+          <div class="section-desc">Git hooks, shell scripts, CI pipelines, and developer tooling that automates the boring stuff</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-workflow"></div>
+    </div>
+    <!-- PROMPT 101 - BEGINNER SECTION -->
+    <div class="section" id="section-beginner">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(74,222,128,0.1)">🌱</div>
+        <div>
+          <div class="section-title">Prompt 101 — Start Here <span class="level-badge level-beginner">🌟 Beginner</span></div>
+          <div class="section-desc">Your first steps to writing prompts that actually work. Go from zero to productive in 20 minutes.</div>
+        </div>
+      </div>
+
+      <div class="tip-box green" style="margin-bottom:24px">
+        <strong>👋 Welcome, New Prompt Engineer!</strong>
+        If you've ever typed "help me build a website" into ChatGPT and gotten useless output — this section is for you. You'll learn the fundamental patterns that turn vague requests into production-ready code. Each prompt below includes a <b>❌ Bad</b> vs <b>✅ Good</b> comparison so you can see exactly what changes.
+      </div>
+
+      <div class="prompts-grid" id="prompts-beginner"></div>
+
+      <div class="glow-line"></div>
+
+      <div style="margin-top:12px">
+        <div class="section-title" style="font-size:20px;margin-bottom:16px">🎯 Your First 5 Prompts — Practice Exercises</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Try these right now in any AI tool. Each one is designed to teach you one fundamental skill:</p>
+
+        <div class="exercise-step">
+          <strong>Exercise 1: The Stack Declaration</strong>
+          Open your AI tool and type: <code>I'm using React 18 with TypeScript and Tailwind CSS. Create a responsive navbar with a mobile hamburger menu.</code> Notice how the output matches your exact stack.
+        </div>
+        <div class="exercise-step">
+          <strong>Exercise 2: The Before/After</strong>
+          Paste any piece of your existing code, then add: <code>Refactor this to be more readable. Keep the same behavior. Add comments explaining each change.</code>
+        </div>
+        <div class="exercise-step">
+          <strong>Exercise 3: The Specific Ask</strong>
+          Instead of "build me a form", try: <code>Build a contact form with name (required, min 2 chars), email (required, valid format), and message (required, min 10 chars). Use React Hook Form + Zod. Show inline errors below each field.</code>
+        </div>
+        <div class="exercise-step">
+          <strong>Exercise 4: The Critique Follow-Up</strong>
+          After any AI response, reply with: <code>Now list the 3 biggest problems with this code from a senior developer's perspective. Then fix all of them.</code>
+        </div>
+        <div class="exercise-step">
+          <strong>Exercise 5: The Output Format Control</strong>
+          End any prompt with: <code>Return only the code. No explanations. Use TypeScript strict mode. Separate each file with a header comment showing the file path.</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADVANCED PROMPT LAB SECTION -->
+    <div class="section" id="section-advanced">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(251,146,60,0.1)">🧪</div>
+        <div>
+          <div class="section-title">Advanced Prompt Lab <span class="level-badge level-advanced">🔥 Expert</span></div>
+          <div class="section-desc">FAANG-level prompt engineering techniques. Multi-turn orchestration, meta-prompting, and system prompt architecture.</div>
+        </div>
+      </div>
+
+      <div class="tip-box purple" style="margin-bottom:24px">
+        <strong>🧠 For Experienced Prompt Engineers</strong>
+        You already know the basics. This section covers the techniques that FAANG prompt engineers use internally: multi-turn orchestration, self-healing prompts, meta-cognitive patterns, and prompt chains that produce code indistinguishable from human-written.
+      </div>
+
+      <div class="prompts-grid" id="prompts-advanced"></div>
+
+      <div class="glow-line"></div>
+
+      <div style="margin-top:12px">
+        <div class="section-title" style="font-size:20px;margin-bottom:16px">🏆 The Prompt Mastery Ladder</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Where are you on the journey? Each level unlocks dramatically better output quality:</p>
+        <table class="ref-table">
+          <thead><tr><th>Level</th><th>Skill</th><th>Typical Output Quality</th></tr></thead>
+          <tbody>
+            <tr><td>🥎 Bronze</td><td>You ask a question and accept the first answer</td><td>~30% usable</td></tr>
+            <tr><td>🥈 Silver</td><td>You provide context (stack, existing code) and specify format</td><td>~60% usable</td></tr>
+            <tr><td>🥇 Gold</td><td>You use Role + Context + Task + Constraints + DO NOT blocks</td><td>~80% usable</td></tr>
+            <tr><td>💎 Platinum</td><td>You use chain-of-thought, multi-turn refinement, and meta-prompting</td><td>~92% usable</td></tr>
+            <tr><td>👑 FAANG</td><td>You architect prompt pipelines, self-healing loops, and can generate prompts that generate prompts</td><td>~98% production-ready</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- CHEAT SHEET -->
     <div class="section" id="section-cheatsheet">
       <div class="section-header">
@@ -863,7 +1247,7 @@
 
   <div class="footer">
     <div class="footer-logo">Web Dev <span>AI Prompt Book</span></div>
-    <div>61 prompts · 8 categories · Built for developers</div>
+    <div>103 prompts · 16 categories · Built for developers</div>
   </div>
 </div>
 
@@ -1674,6 +2058,573 @@ Implement:
 - Feature flag pattern using env vars
 - How to add a new env var (process and PR template)` },
   ],
+  a11y: [
+    { num: "#UX1", title: "Comprehensive WCAG Audit", tag: "tag-a11y", tagLabel: "Audit", useCase: "Find and fix accessibility issues in existing code", prompt: `Perform a comprehensive accessibility audit against WCAG 2.2 AA standards on this code.
+
+[Paste your HTML/React component]
+
+Analyze for:
+1. Keyboard navigability (tab order, focus states)
+2. Screen reader experience (ARIA attributes, semantic HTML, visually hidden text)
+3. Color contrast issues
+4. Motion and animation (prefers-reduced-motion)
+5. Touch targets and sizing
+
+For every issue found, provide:
+- The WCAG rule violated
+- The specific line of code
+- The exact fix needed` },
+    { num: "#UX2", title: "Generate Accessible Component", tag: "tag-a11y", tagLabel: "Component", useCase: "Build an accessible complex UI element from scratch", prompt: `Build a highly accessible [Dropdown Menu / Modal / Accordion / Tabs] in [React / Vanilla JS + HTML].
+
+Requirements:
+- Must follow the exact WAI-ARIA authoring practices design pattern
+- Full keyboard support (Arrow keys, Home, End, Escape)
+- Proper ARIA roles and state management (aria-expanded, aria-selected, etc.)
+- Focus management (trap focus inside modals, return focus when closed)
+- High contrast compliant CSS
+- No dependencies — write it from scratch
+
+Provide the code and a brief explanation of how the a11y features work.` },
+    { num: "#UX3", title: "Design System Tokens", tag: "tag-a11y", tagLabel: "Design", useCase: "Generate an accessible color palette and typography system", prompt: `Generate a complete set of CSS design tokens (variables) for a [brand type: e.g., dark-mode developer tool, vibrant e-commerce, minimalist blog].
+
+Requirements:
+1. Color palette: Primary, Secondary, Background, Surface, Text, Success, Error, Warning
+2. Contrast: All text-to-background combinations MUST exceed WCAG AA contrast ratio (4.5:1)
+3. Spacing scale: Consistent rem-based scale (e.g., 4px baseline)
+4. Typography: Fluid typography clamps for headings and body text
+5. Provide a test matrix showing which text colors can be safely used on which background colors.
+
+Output as CSS variables inside a :root block.` },
+    { num: "#UX4", title: "Microcopy Optimization", tag: "tag-a11y", tagLabel: "Copy", useCase: "Improve UX writing for clarity and conversion", prompt: `Improve the UX microcopy for this [user flow: e.g., checkout process, error state, onboarding screen].
+
+Current copy:
+[Paste current copy or describe the UI state]
+
+Goal: [e.g., Reduce confusion, increase click-through rate, reduce anxiety about payment]
+Tone: [e.g., Professional and clear / Playful and encouraging / Concise and direct]
+
+Provide:
+1. The improved copy (Headings, buttons, helper text, error messages)
+2. Why this copy performs better psychologically
+3. A variant for screen readers (aria-labels) if the visual text needs to be ultra-short.` },
+    { num: "#UX5", title: "Responsive Layout Strategy", tag: "tag-a11y", tagLabel: "Layout", useCase: "Plan a complex responsive layout before coding", prompt: `Design the responsive layout strategy for a complex [Dashboard / Multi-step form / Data table].
+
+Constraints:
+- Must work from 320px mobile up to 4K ultrawide
+- Contains: [List key elements, e.g., sidebar, data chart, user list, action panel]
+
+Provide:
+1. Breakpoint definitions and rationale
+2. CSS Grid / Flexbox architecture for each breakpoint (mobile, tablet, desktop)
+3. What elements should be hidden, collapsed, or transformed at smaller sizes?
+4. Touch interaction considerations for mobile
+5. The skeleton CSS code representing this structure` }
+  ],
+  sec: [
+    { num: "#SEC1", title: "STRIDE Threat Modeling", tag: "tag-sec", tagLabel: "Architecture", useCase: "Identify systemic risks in an architecture before writing code", prompt: `Act as a Staff Application Security Engineer at a FAANG company. Perform a STRIDE threat modeling analysis on this proposed architecture:
+
+[Paste architecture document or describe your system, data flow, and components]
+
+For each category (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege):
+1. Identify 2-3 specific attack vectors tailored to this exact tech stack.
+2. Provide the recommended mitigation strategy using modern, zero-trust principles.
+3. Suggest a specific testing/verification method to ensure the mitigation holds.` },
+    { num: "#SEC2", title: "Zero-Trust Auth Review", tag: "tag-sec", tagLabel: "Auth", useCase: "Review authentication and authorization flows", prompt: `Act as a Staff Application Security Engineer. Review my authentication/authorization flow for vulnerabilities.
+
+Tech Stack: [e.g., NextAuth, JWT, Passport, AWS Cognito]
+Flow Description: [Explain how users login, how tokens are stored, and how routes are protected]
+
+Critique this implementation looking for:
+1. Session fixation or token leakage (e.g., localStorage vs HTTP-only cookies).
+2. Missing CSRF or CORS protections.
+3. IDOR (Insecure Direct Object Reference) vulnerabilities in the authorization logic.
+4. Token expiration and revocation flaws.
+
+Rewrite the flow to meet strict enterprise zero-trust security standards.` },
+    { num: "#SEC3", title: "SAST & SCA Automated Fix", tag: "tag-sec", tagLabel: "Audit", useCase: "Resolve code scanner alerts with proper context", prompt: `Act as a Staff Application Security Engineer. Help me resolve these Static Application Security Testing (SAST) and Software Composition Analysis (SCA) alerts.
+
+Vulnerability/Alert:
+[Paste your Veracode/SonarQube/Snyk alert]
+
+Code in question:
+[Paste the vulnerable code]
+
+Provide:
+1. The fundamental cause of this vulnerability (why it exists).
+2. A direct code fix that eliminates the risk without introducing regressions.
+3. An explanation of why your fix prevents the exploit.
+4. A preventative measure (e.g., a linter rule or pipeline check) so this doesn't happen again.` },
+    { num: "#SEC4", title: "Secure Cryptography Implementation", tag: "tag-sec", tagLabel: "Crypto", useCase: "Safely handle hashing, encryption, and secrets", prompt: `Act as a Cryptographic Security Engineer. I need to implement [password hashing / PII encryption / secure token generation] in [Node.js / Python / Go].
+
+My current approach:
+[Describe your approach or paste code, e.g., using bcrypt, AES-256, crypto.randomBytes]
+
+Analyze this approach and provide:
+1. Is the chosen algorithm/library currently considered secure against modern attacks (and post-quantum considerations)?
+2. The exact code implementation adhering to NIST guidelines.
+3. Proper handling of salts, IVs (Initialization Vectors), and key rotation.
+4. Common implementation pitfalls to avoid.` },
+    { num: "#SEC5", title: "Incident Response Playbook", tag: "tag-sec", tagLabel: "Response", useCase: "Generate a tactical plan for an active or theoretical breach", prompt: `Act as a FAANG Incident Response Lead. Generate a tactical Incident Response Playbook for the following scenario:
+
+Scenario: [e.g., Database credentials were accidentally leaked to a public GitHub repo / An active DDoS is targeting the login endpoint / Ransomware suspected on production servers]
+Stack: [AWS, Kubernetes, Postgres, Node.js]
+
+Provide a strict, prioritized chronological checklist:
+1. Triage & Containment (0-1 hours): Immediate steps to stop the bleeding.
+2. Investigation (1-4 hours): How to determine the blast radius and identify the threat actor.
+3. Eradication & Recovery: Safely restoring services and closing the vector.
+4. Post-Incident: What forensic data to capture for the post-mortem.
+
+Keep it highly technical, specific to the stack, and actionable.` }
+  ],
+  ai: [
+    { num: "#AI1", title: "RAG Pipeline Architecture", tag: "tag-ai", tagLabel: "Architecture", useCase: "Design a Retrieval-Augmented Generation system", prompt: `Design a production-ready Retrieval-Augmented Generation (RAG) pipeline for my [Next.js / Node.js] application.
+
+Use case: [e.g., A chatbot that answers questions based on our company's internal markdown documentation].
+Expected data volume: [e.g., 10,000 documents].
+
+Provide a technical architecture covering:
+1. Ingestion Strategy: Chunking method, embedding model choice (e.g., text-embedding-3-small), and metadata extraction.
+2. Vector Database: Recommendation and schema design (e.g., Pinecone, pgvector, Qdrant).
+3. Retrieval Strategy: Hybrid search (keyword + semantic) and re-ranking approach.
+4. Prompt Construction: How the retrieved context is injected into the LLM prompt.
+5. Diagram the data flow from user query to LLM response.` },
+    { num: "#AI2", title: "React Streaming UI Component", tag: "tag-ai", tagLabel: "Frontend", useCase: "Build a smooth typing effect for LLM responses", prompt: `Write a React component that handles streaming text responses from an LLM API (like OpenAI or Anthropic) via Server-Sent Events (SSE) or the Vercel AI SDK.
+
+Requirements:
+1. Smooth streaming UI (like ChatGPT) without jitter or re-rendering whole blocks.
+2. Markdown parsing on the fly (render code blocks, bold text, and lists as they stream in).
+3. Auto-scroll to the bottom as new text arrives, but stop auto-scrolling if the user scrolls up to read.
+4. A "Stop Generating" button that successfully aborts the AbortController.
+5. Error handling for stream timeouts or API failures.
+
+Use TypeScript and [Tailwind CSS / styled-components] for styling.` },
+    { num: "#AI3", title: "Structured JSON Extraction", tag: "tag-ai", tagLabel: "Backend", useCase: "Force LLMs to return strict JSON matching a schema", prompt: `I need an LLM to extract unstructured text into a strict JSON format in [Node.js / Python].
+
+Input text example:
+[Paste an example of the messy text, e.g., an email or invoice]
+
+Target JSON Schema:
+[Paste your Zod schema, TypeScript interface, or describe the exact JSON shape needed]
+
+Write the exact System Prompt and API call configuration (using function calling / tool use / JSON mode) to guarantee the LLM outputs ONLY valid JSON matching this schema.
+Include error handling for when the LLM hallucinates an incorrect key or fails parsing.` },
+    { num: "#AI4", title: "Agentic Tool Use Implementation", tag: "tag-ai", tagLabel: "Agents", useCase: "Connect an LLM to external APIs or databases", prompt: `I want to build an LLM Agent that can call external functions/tools in my [Node.js / Python] backend.
+
+The Agent needs access to these two tools:
+1. [e.g., 'getUserProfile' - takes a userId and returns JSON from my database]
+2. [e.g., 'refundOrder' - takes an orderId and triggers a Stripe refund API]
+
+Provide:
+1. The JSON Schema definitions for these tools to pass to the OpenAI/Anthropic API.
+2. The system prompt instructing the model on WHEN and HOW to use these tools.
+3. The execution loop logic: catching the tool_call, executing my local code, and returning the result back to the LLM to continue its thought process.` },
+    { num: "#AI5", title: "Prompt Injection Defense", tag: "tag-ai", tagLabel: "Security", useCase: "Protect your AI features from jailbreaks and prompt injection", prompt: `I am building a public-facing AI feature: [describe feature, e.g., an AI customer support bot that has access to user billing data].
+
+I need to protect this system against Prompt Injection, Jailbreaks, and System Prompt Leaks.
+
+Provide a defense-in-depth strategy including:
+1. Input sanitization and pre-prompt guardrails (e.g., using a secondary cheap LLM to classify intent).
+2. The specific "Sandwich Strategy" or delimiter technique to separate user input from system instructions.
+3. Output validation rules.
+4. Write the hardened System Prompt that includes explicit rules against ignoring previous instructions or leaking its prompt.` }
+  ],
+  starter: [
+    { num: "#ST1", title: "Next.js SaaS Boilerplate", tag: "tag-starter", tagLabel: "Scaffold", useCase: "Get a complete SaaS starter with auth, billing, and dashboard", prompt: `Generate a complete Next.js 14 App Router SaaS boilerplate. I need to copy-paste this and have it running immediately.
+
+Include these files:
+1. app/layout.tsx — root layout with providers (theme, auth, toast)
+2. app/page.tsx — marketing landing page with hero, features, pricing
+3. app/(dashboard)/layout.tsx — authenticated layout with sidebar
+4. app/(dashboard)/page.tsx — dashboard home with stats cards
+5. app/api/auth/[...nextauth]/route.ts — NextAuth with Google + GitHub providers
+6. lib/db.ts — Prisma client singleton
+7. prisma/schema.prisma — User, Account, Session, Subscription models
+8. middleware.ts — protect /dashboard routes
+
+Stack: TypeScript strict, Tailwind CSS, Prisma, NextAuth v5.
+Return each file with its full path as a header. Every file must be complete — no TODOs or placeholders.` },
+    { num: "#ST2", title: "REST API in 60 Seconds", tag: "tag-starter", tagLabel: "Backend", useCase: "Generate a complete Express/Fastify API with CRUD and validation", prompt: `Generate a complete, production-ready REST API for a [resource, e.g., "products" / "users" / "posts"] entity.
+
+Stack: [Express + Zod / Fastify + TypeBox / Hono], TypeScript, Prisma.
+
+Generate these files:
+1. src/index.ts — server entry with CORS, helmet, error handler
+2. src/routes/[resource].ts — all 5 CRUD routes (GET all, GET by id, POST, PUT, DELETE)
+3. src/schemas/[resource].ts — Zod validation schemas for create and update
+4. src/middleware/errorHandler.ts — global error handler with proper HTTP status codes
+5. prisma/schema.prisma — the model with timestamps
+6. .env.example — all required env vars
+
+Every route must have: input validation, proper status codes (201 for create, 204 for delete), try/catch, and typed responses.` },
+    { num: "#ST3", title: "React Component Library Starter", tag: "tag-starter", tagLabel: "Components", useCase: "Scaffold a reusable UI library with Storybook and tests", prompt: `Generate a complete React component library starter kit that I can copy-paste and start building components immediately.
+
+Include:
+1. package.json — with React, TypeScript, Storybook 8, Vitest, tsup for bundling
+2. tsconfig.json — strict mode, path aliases
+3. src/components/Button/Button.tsx — a polymorphic Button component (variant: primary/secondary/ghost, size: sm/md/lg)
+4. src/components/Button/Button.stories.tsx — Storybook stories for all variants
+5. src/components/Button/Button.test.tsx — Vitest + Testing Library tests
+6. src/index.ts — barrel export
+7. .storybook/main.ts and preview.ts — Storybook config
+8. tsup.config.ts — build config that outputs ESM + CJS
+
+The Button must be fully typed with generics (supports as="a" | "button" | any element).` },
+    { num: "#ST4", title: "Authentication Flow Starter", tag: "tag-starter", tagLabel: "Auth", useCase: "Complete login/signup/forgot-password flow ready to paste", prompt: `Generate a complete authentication flow for my [Next.js / React + Express] app.
+
+Pages/Components needed:
+1. LoginForm — email + password, "Remember me", link to forgot password
+2. SignupForm — name, email, password, confirm password, terms checkbox
+3. ForgotPasswordForm — email input, sends reset link
+4. ResetPasswordForm — new password + confirm, validates token from URL
+
+For each form:
+- Use [React Hook Form + Zod / Formik + Yup] for validation
+- Show inline field-level errors
+- Loading state on submit button
+- Toast notification on success/error
+- Proper accessibility (labels, aria-invalid, focus management)
+
+Also generate the 4 corresponding API routes with [NextAuth / JWT] and proper password hashing with bcrypt.` },
+    { num: "#ST5", title: "Docker + Deploy Config", tag: "tag-starter", tagLabel: "DevOps", useCase: "Production-ready Docker and deployment configuration", prompt: `Generate a complete production deployment configuration for my [Next.js / Node.js] application.
+
+Files needed:
+1. Dockerfile — multi-stage build (builder + runner), non-root user, optimized layer caching
+2. docker-compose.yml — app + PostgreSQL + Redis with healthchecks and volumes
+3. docker-compose.dev.yml — development override with hot reload and debug ports
+4. .dockerignore — exclude node_modules, .git, .env, etc.
+5. nginx.conf — reverse proxy with SSL termination, gzip, security headers
+6. .github/workflows/deploy.yml — GitHub Actions: test → build → push to registry → deploy
+
+The Dockerfile must score an A on Docker best practices: no root, minimal image (alpine), layer caching for npm install, and proper HEALTHCHECK.` }
+  ],
+  oneshot: [
+    { num: "#OS1", title: "Complete CRUD Feature", tag: "tag-oneshot", tagLabel: "Full Stack", useCase: "Frontend + API + DB for any entity in one prompt", prompt: `Build a complete CRUD feature for [entity, e.g., "blog posts" / "products" / "team members"] across my entire stack.
+
+Stack: [Next.js 14 App Router / React + Express], TypeScript, Prisma, [Tailwind / CSS Modules].
+
+Generate ALL of these in one response:
+
+1. DATABASE: Prisma model with all fields, timestamps, and a seed script
+2. API: All 5 routes (list with pagination + search, get by id, create, update, delete)
+3. TYPES: Shared TypeScript interfaces for the entity and API responses
+4. UI - List Page: Table/grid with search bar, pagination, delete confirmation modal
+5. UI - Create/Edit Form: Form with validation, loading states, success/error toasts
+6. UI - Detail View: Display all fields with edit/delete actions
+7. HOOK: A custom React hook (or server actions) that wraps all API calls with loading/error states
+
+Every piece must be wired together. I should be able to paste all files and have a working feature.` },
+    { num: "#OS2", title: "Real-Time Feature", tag: "tag-oneshot", tagLabel: "WebSocket", useCase: "Build a live feature with WebSockets in one shot", prompt: `Build a complete real-time [chat room / live notifications / collaborative editor / live dashboard] feature.
+
+Stack: [Next.js / React] frontend + [Socket.io / WebSocket API / Pusher] backend.
+
+Generate:
+1. Server: WebSocket server setup with room/channel management, connection/disconnection handling
+2. Client Hook: useWebSocket custom hook with auto-reconnect, exponential backoff, and connection status
+3. UI Component: The [chat interface / notification bell / live widget] with real-time updates
+4. Types: Shared event types between client and server (type-safe event names and payloads)
+5. Error handling: What happens when the connection drops mid-action?
+
+The connection must handle: reconnection, duplicate message prevention, and graceful degradation when WebSocket is unavailable.` },
+    { num: "#OS3", title: "File Upload Pipeline", tag: "tag-oneshot", tagLabel: "Upload", useCase: "Drag-and-drop upload with preview, progress, and cloud storage", prompt: `Build a complete file upload feature from UI to cloud storage.
+
+Stack: [Next.js / React] + [AWS S3 / Cloudflare R2 / Supabase Storage]
+
+Generate:
+1. UI Component: Drag-and-drop zone with file preview (images show thumbnails), file type validation, size limit display
+2. Upload Hook: useFileUpload with progress percentage, cancel upload, retry on failure
+3. API Route: Presigned URL generation for direct-to-cloud upload (never stream through your server)
+4. Database: Prisma model for file metadata (url, size, type, uploadedBy, createdAt)
+5. Cleanup: API route to delete file from cloud + database
+
+Must support: multiple file upload, drag-and-drop, paste from clipboard, image preview before upload, and progress bars for each file.` },
+    { num: "#OS4", title: "Search & Filter System", tag: "tag-oneshot", tagLabel: "Search", useCase: "Debounced search with filters, sorting, and URL state", prompt: `Build a complete search, filter, and sort system for a [product listing / user directory / content library].
+
+Stack: [Next.js App Router with searchParams / React + React Router], TypeScript.
+
+Generate:
+1. Search Bar: Debounced input (300ms) with search icon and clear button
+2. Filter Panel: [Category dropdown / Price range slider / Date range picker / Status toggle chips]
+3. Sort Controls: Sort by [name / date / price / relevance] with asc/desc toggle
+4. Results Grid: Responsive grid with loading skeleton, empty state, and result count
+5. URL State: All filters, search query, sort order, and page number synced to URL searchParams (shareable, bookmarkable)
+6. API Integration: Server-side filtering with Prisma where clauses built from searchParams
+7. Pagination: Cursor-based or offset pagination with "Load More" or page numbers
+
+The entire filter state must survive page refresh via URL.` },
+    { num: "#OS5", title: "Email Notification System", tag: "tag-oneshot", tagLabel: "Email", useCase: "Transactional emails with templates, queue, and preferences", prompt: `Build a complete email notification system for my [Next.js / Node.js] app.
+
+Generate:
+1. Email Templates: React Email (or MJML) templates for [welcome / password reset / invoice / weekly digest] — responsive, dark mode compatible
+2. Email Service: Abstraction layer over [Resend / SendGrid / AWS SES] with retry logic
+3. Notification Preferences: Database model and API for users to toggle which emails they receive
+4. Queue: Background job processing with [BullMQ / Inngest] so emails don't block the request
+5. API Routes: POST /api/notifications/send, GET/PUT /api/notifications/preferences
+6. Unsubscribe: One-click unsubscribe link with signed token (CAN-SPAM compliant)
+
+Every email must have: plain text fallback, unsubscribe header, and proper From/Reply-To configuration.` }
+  ],
+  workflow: [
+    { num: "#WF1", title: "Git Hooks & Pre-Commit", tag: "tag-workflow", tagLabel: "Git", useCase: "Automate linting, formatting, and commit message validation", prompt: `Set up a complete Git hooks system for my [Next.js / React / Node.js] project that enforces code quality automatically.
+
+Generate:
+1. package.json scripts: lint, format, type-check, test:staged
+2. .husky/pre-commit: Run lint-staged (only lint changed files for speed)
+3. .husky/commit-msg: Validate commit messages follow Conventional Commits (feat:, fix:, chore:, etc.)
+4. .lintstagedrc.js: Run ESLint --fix + Prettier on staged .ts/.tsx files, stylelint on .css files
+5. commitlint.config.js: Conventional Commits rules
+6. .prettierrc and .eslintrc.js: Opinionated configs for [React / Node.js] with TypeScript
+
+Requirements:
+- Pre-commit must run in under 3 seconds (lint-staged, not full project)
+- Failed lint = blocked commit (no --no-verify bypass instructions)
+- Include the exact npm install command with all devDependencies` },
+    { num: "#WF2", title: "Project Generator Script", tag: "tag-workflow", tagLabel: "CLI", useCase: "A custom CLI that scaffolds new projects with your team's standards", prompt: `Create a Node.js CLI script (using Commander.js or Inquirer) that scaffolds a new project based on my team's standards.
+
+The CLI should:
+1. Ask: "Project name?", "Template? (API / Web App / Library)", "Include CI? (yes/no)"
+2. Create the folder structure based on selected template
+3. Generate package.json with correct scripts and dependencies
+4. Copy standard configs: tsconfig, eslint, prettier, .gitignore, .env.example
+5. Initialize git repo with initial commit
+6. Run npm install
+7. Print a success message with "next steps"
+
+Templates:
+- API: Express + Prisma + Zod + Vitest structure
+- Web App: Next.js App Router + Tailwind + NextAuth skeleton
+- Library: tsup + Vitest + Storybook skeleton
+
+Make it a single executable file I can run with npx.` },
+    { num: "#WF3", title: "Database Migration Workflow", tag: "tag-workflow", tagLabel: "Database", useCase: "Safe migration scripts with rollback and seed automation", prompt: `Create a complete database migration workflow for my [Prisma / Drizzle / Knex] project.
+
+Generate:
+1. Migration script: A shell script that runs migrations safely with backup-first approach
+2. Seed script: Faker.js-based seed file that generates realistic test data for ALL models
+3. Reset script: Drop → Migrate → Seed in one command (dev only, with environment check)
+4. CI integration: GitHub Action step that runs migrations on deploy to staging/prod
+5. Rollback script: How to safely revert the last migration
+
+Safety requirements:
+- Production migrations MUST create a database backup first
+- Destructive migrations (drop column, drop table) must require manual confirmation
+- Seed script must be idempotent (safe to run multiple times)
+- All scripts must log what they're doing with timestamps` },
+    { num: "#WF4", title: "Automated Code Quality Report", tag: "tag-workflow", tagLabel: "Metrics", useCase: "Generate a weekly codebase health dashboard", prompt: `Create a script that generates an automated code quality report for my TypeScript project.
+
+The script should analyze and output:
+1. TypeScript Coverage: % of files with strict types (no 'any' count)
+2. Test Coverage: Parse Jest/Vitest coverage summary (lines, branches, functions)
+3. Bundle Size: Track and compare against previous build (flag if >5% increase)
+4. Dependency Audit: Count of outdated packages, known vulnerabilities (npm audit)
+5. Code Complexity: Identify the 10 most complex functions (cyclomatic complexity)
+6. Dead Code: Exports that are never imported anywhere
+7. TODO/FIXME Count: List all TODO comments with file locations
+
+Output format: A markdown file (REPORT.md) with tables and emoji indicators (🟢 good, 🟡 warning, 🔴 critical).
+Bonus: A GitHub Action that runs this weekly and posts to Slack.` },
+    { num: "#WF5", title: "Environment Setup Automation", tag: "tag-workflow", tagLabel: "Setup", useCase: "One-command dev environment setup for new team members", prompt: `Create a comprehensive developer onboarding automation script for my [Next.js / Node.js] project.
+
+The script (setup.sh or setup.ps1) should:
+1. Check prerequisites: Node.js version (via .nvmrc), pnpm/npm, Docker, Git
+2. Install dependencies: pnpm install with frozen lockfile
+3. Set up environment: Copy .env.example → .env.local with prompts for required values
+4. Database: Start Docker containers, run migrations, seed with test data
+5. Generate: Prisma client, GraphQL codegen, or any other code generation steps
+6. Verify: Run a quick smoke test (type-check + build + test) to confirm everything works
+7. Print: Clear success message with local URLs and useful commands
+
+The script must:
+- Work on macOS, Linux, AND Windows (PowerShell)
+- Be idempotent (safe to run again if something fails)
+- Show colored output with progress indicators
+- Exit with clear error message if any step fails` }
+  ],
+  beginner: [
+    { num: "#B1", title: "Your First Good Prompt", tag: "tag-beginner", tagLabel: "Fundamentals", useCase: "Learn why specificity is the #1 skill in prompt engineering", prompt: `I'm a beginner learning to use AI for web development. Teach me the difference between a bad prompt and a good prompt by showing me 3 examples.
+
+For each example:
+1. Show the BAD prompt (what a beginner would type)
+2. Show the GOOD prompt (what a prompt engineer would type)
+3. Explain WHY the good version works better
+4. Show a sample of the kind of output each would produce
+
+Use web development examples (HTML, CSS, JavaScript, React).
+Make the explanations beginner-friendly — assume I've never used AI for coding before.` },
+    { num: "#B2", title: "The Copy-Paste Starter", tag: "tag-beginner", tagLabel: "First Steps", useCase: "Get working code on your first try without knowing prompt engineering", prompt: `I'm a [beginner / junior developer] and I need you to build [describe what you need, e.g., "a responsive landing page with a hero section, features grid, and contact form"].
+
+My skill level: [beginner / intermediate]
+Technologies I know: [HTML + CSS / JavaScript / React basics]
+
+Please:
+1. Write the COMPLETE code — I will copy-paste it directly
+2. Add a comment above every section explaining what it does in simple language
+3. Use only [HTML + CSS + vanilla JS / React] — no libraries I haven't mentioned
+4. Make it look modern and professional (not plain or boring)
+5. At the end, give me step-by-step instructions on how to run it locally` },
+    { num: "#B3", title: "Explain Like I'm Junior", tag: "tag-beginner", tagLabel: "Learning", useCase: "Understand any coding concept with clear analogies and examples", prompt: `Explain [concept, e.g., "React useEffect" / "CSS Flexbox" / "async/await" / "REST APIs"] to me like I'm a junior developer who has been coding for 6 months.
+
+Rules:
+1. Start with a real-world analogy (not a coding analogy)
+2. Show the SIMPLEST possible working code example
+3. Then show a slightly more realistic example
+4. List the 3 most common mistakes beginners make with this concept
+5. Give me a small challenge I can try myself to practice
+6. End with: "When you're ready, I'll review your solution"
+
+Do NOT use jargon without explaining it first.` },
+    { num: "#B4", title: "Debug My Error", tag: "tag-beginner", tagLabel: "Debugging", useCase: "Learn to ask for debugging help effectively", prompt: `I'm getting an error and I don't understand it. Help me fix it AND learn from it.
+
+The error message:
+[Paste your exact error message here]
+
+My code:
+[Paste the relevant code here]
+
+What I was trying to do:
+[Describe in plain English what you expected to happen]
+
+Please:
+1. Explain what this error means in plain English (no jargon)
+2. Tell me EXACTLY which line is causing the problem and why
+3. Show me the fixed code
+4. Explain what I should look for next time I see this type of error
+5. Rate how common this mistake is (very common / somewhat common / rare)` },
+    { num: "#B5", title: "Build My First Project", tag: "tag-beginner", tagLabel: "Project", useCase: "Get a step-by-step guided project from idea to deployment", prompt: `I want to build my first web project: [describe it, e.g., "a personal portfolio website" / "a todo app" / "a weather app that uses an API"].
+
+My current skills: [HTML + CSS only / HTML + CSS + basic JS / React basics]
+Time I have: [a weekend / a week / a few hours]
+
+Create a step-by-step build plan:
+1. Break the project into small tasks I can complete one at a time
+2. For each task, give me the exact code to write
+3. Explain what each piece of code does
+4. After each task, tell me how to TEST that it works before moving on
+5. Start with the easiest task to build my confidence
+
+Format as a numbered checklist I can follow. Mark the difficulty of each step (easy / medium / challenging).` },
+    { num: "#B6", title: "Review My Code Gently", tag: "tag-beginner", tagLabel: "Review", useCase: "Get constructive feedback that teaches rather than criticizes", prompt: `Review my code as a friendly senior developer who wants to help me improve. I'm a beginner, so please be encouraging.
+
+[Paste your code here]
+
+For your review:
+1. First, tell me what I did WELL (at least 2 things)
+2. Then list improvements, ranked from most important to least
+3. For each improvement, show the BEFORE (my code) and AFTER (your suggestion)
+4. Explain WHY each change is better (not just that it IS better)
+5. Rate my code overall: "Great start" / "Good with room to grow" / "Needs some work"
+6. Give me ONE thing to focus on improving for my next project
+
+Be honest but kind. Don't overwhelm me with too many changes.` }
+  ],
+  advanced: [
+    { num: "#ADV1", title: "Meta-Prompting: Prompt That Writes Prompts", tag: "tag-advanced", tagLabel: "Meta", useCase: "Generate optimal prompts automatically for any task", prompt: `Act as a FAANG-level Prompt Engineering Architect. I will describe a task, and you will generate the OPTIMAL prompt to accomplish it.
+
+My task: [describe what you need, e.g., "I need to generate a complete authentication system for Next.js"]
+
+Generate the optimal prompt by:
+1. Analyzing what Role, Context, Task, Constraints, and Output Format would produce the best result
+2. Identifying what information is missing that I should include
+3. Adding negative constraints (DO NOT blocks) to prevent common failure modes
+4. Including chain-of-thought instructions if the task is complex
+5. Specifying the exact output structure
+
+Output format:
+- First, show me the OPTIMIZED PROMPT I should use (ready to copy-paste)
+- Then explain your prompt engineering decisions: why you chose each element
+- Finally, suggest 2 follow-up prompts to refine the initial output` },
+    { num: "#ADV2", title: "Multi-Turn Orchestration Pipeline", tag: "tag-advanced", tagLabel: "Pipeline", useCase: "Design a 5-step prompt chain that builds on itself", prompt: `Design a multi-turn prompt pipeline for building a complete [describe feature, e.g., "e-commerce checkout flow with Stripe"].
+
+Create exactly 5 sequential prompts where each builds on the output of the previous one:
+
+PROMPT 1 (Architecture): Design the data model, API contracts, and component tree
+PROMPT 2 (Backend): Implement the API routes and database logic using the architecture from Step 1
+PROMPT 3 (Frontend): Build the UI components consuming the API from Step 2
+PROMPT 4 (Integration): Wire everything together, add error handling and loading states
+PROMPT 5 (Hardening): Security audit, edge case handling, tests, and performance optimization
+
+For each prompt:
+- Write the exact prompt text (ready to paste)
+- Specify what output from the previous step should be pasted as context
+- Include a validation checkpoint: "Before proceeding, verify that [X] is correct"
+
+This pipeline should produce production-ready code after all 5 steps.` },
+    { num: "#ADV3", title: "Self-Healing Prompt Loop", tag: "tag-advanced", tagLabel: "Autonomous", useCase: "Make the AI detect and fix its own mistakes automatically", prompt: `Generate [describe what you need, e.g., "a React dashboard component with charts"]. 
+
+After generating the code, perform a SELF-HEALING LOOP:
+
+PHASE 1 - Generate: Write the initial implementation
+PHASE 2 - Audit: Review your own code for these specific issues:
+  - TypeScript errors (would this compile with strict mode?)
+  - Missing imports or undefined variables
+  - Unhandled edge cases (null, undefined, empty arrays, network failures)
+  - Security issues (XSS, injection, exposed secrets)
+  - Performance problems (unnecessary re-renders, missing memoization)
+PHASE 3 - Fix: For each issue found, fix it in place
+PHASE 4 - Verify: Re-audit the fixed code. If new issues were introduced by fixes, fix those too.
+PHASE 5 - Report: List what was caught and fixed in a "Self-Healing Report" at the end
+
+Return ONLY the final, healed code + the report. Do NOT show intermediate versions.` },
+    { num: "#ADV4", title: "Adversarial Red-Team Prompting", tag: "tag-advanced", tagLabel: "Red Team", useCase: "Stress-test any code by making the AI attack its own output", prompt: `I'm going to give you code. Your job is to BREAK IT as a hostile adversary, then FIX everything you broke.
+
+[Paste your code or describe the system]
+
+PHASE 1 - Red Team Attack:
+Act as a malicious user / attacker. Find every way to:
+1. Crash the application (invalid inputs, race conditions, memory leaks)
+2. Bypass security (auth bypass, privilege escalation, injection)
+3. Corrupt data (concurrent writes, partial failures, invalid state)
+4. Abuse the system (rate limit bypass, resource exhaustion, scraping)
+
+For each attack, show the exact input / request that would exploit it.
+
+PHASE 2 - Blue Team Defense:
+Now switch to defender. For EVERY attack you found:
+1. Write the exact code fix
+2. Write a test that proves the fix works
+3. Add monitoring/alerting for that attack vector
+
+PHASE 3 - Summary:
+A risk matrix table: Attack | Severity | Fix | Test Status` },
+    { num: "#ADV5", title: "System Prompt Architecture", tag: "tag-advanced", tagLabel: "System", useCase: "Design production-grade system prompts for AI-powered features", prompt: `Act as a Principal Prompt Engineer at Google. Design a production system prompt for an AI-powered feature in my app.
+
+Feature: [describe, e.g., "An AI code review assistant that comments on pull requests"]
+Users: [who will interact with it, e.g., "developers on a team of 50"]
+Access: [what data/tools the AI has access to, e.g., "can read the full repo, PR diff, and CI logs"]
+
+Design the system prompt with these architectural layers:
+
+1. IDENTITY LAYER: Who the AI is, its expertise, and personality
+2. INSTRUCTION LAYER: The exact task with step-by-step methodology
+3. GUARDRAIL LAYER: What the AI must NEVER do (scope boundaries, safety rules)
+4. OUTPUT SCHEMA: Exact JSON/markdown format for responses
+5. FEW-SHOT EXAMPLES: 2 examples showing ideal input → output pairs
+6. FAILURE MODES: What to do when the AI is unsure, when input is ambiguous, when it encounters an error
+7. META-INSTRUCTIONS: Instructions about how to handle prompt injection attempts
+
+Return the complete system prompt (ready to paste into the API call) and explain each architectural decision.` },
+    { num: "#ADV6", title: "Comparative Architecture Analysis", tag: "tag-advanced", tagLabel: "Analysis", useCase: "Get the AI to argue with itself to find the best solution", prompt: `I need to decide between [option A] vs [option B] for [describe your architectural decision, e.g., "server components vs client components for a data-heavy dashboard" / "REST vs GraphQL for a mobile app" / "Prisma vs Drizzle for our ORM"].
+
+Conduct a structured debate:
+
+ROUND 1 - Advocate for Option A:
+Act as a staff engineer who STRONGLY believes Option A is correct. Present your best arguments with code examples, benchmarks, and real-world case studies.
+
+ROUND 2 - Advocate for Option B:
+Now switch sides. Act as a staff engineer who STRONGLY believes Option B is correct. Directly counter the arguments from Round 1.
+
+ROUND 3 - Cross-Examination:
+Identify the weakest argument from each side. What did each advocate conveniently ignore?
+
+ROUND 4 - Verdict:
+As a neutral CTO, synthesize both arguments. Give your recommendation based on MY specific context:
+- Team size: [X]
+- Timeline: [deadline]
+- Scale: [expected load]
+- Team expertise: [what they know best]
+
+Include a decision matrix table with weighted scores.` }
+  ],
 };
 
 function renderPromptCards(containerId, prompts) {
@@ -1694,7 +2645,7 @@ function renderPromptCards(containerId, prompts) {
             <span class="prompt-label">COPY PROMPT</span>
           </div>
           <div class="prompt-text">${escapeHtml(p.prompt)}</div>
-          <button class="copy-btn" onclick="copyPrompt(this, ${JSON.stringify(p.prompt).replace(/'/g, "&#39;")})">
+          <button class="copy-btn" data-prompt="${escapeHtml(p.prompt)}" onclick="copyPrompt(this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Copy Prompt
           </button>
@@ -1708,7 +2659,8 @@ function escapeHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function copyPrompt(btn, text) {
+function copyPrompt(btn) {
+  const text = btn.getAttribute('data-prompt');
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = '✓ Copied!';
     btn.classList.add('copied');
