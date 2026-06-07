@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Dev AI Prompt Book</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: #1e1e2e;
+    --accent: #00ff88;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --blue: #38bdf8;
+    --red: #f43f5e;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 40px;
+    transition: transform 0.3s ease;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; font-weight: 700;
+    color: var(--bg);
+  }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .logo-sub { color: var(--muted); font-size: 11px; font-weight: 400; }
+
+  .nav-section {
+    padding: 20px 12px 8px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    position: relative;
+  }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(0,255,136,0.05);
+  }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; left: 100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .hero h1 .line1 { display: block; color: var(--text); }
+  .hero h1 .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero h1 .line3 { display: block; color: var(--accent2); }
+
+  .hero-desc {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 36px;
+    line-height: 1.8;
+  }
+
+  .hero-stats {
+    display: flex; gap: 40px; flex-wrap: wrap;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* CONTENT AREA */
+  .content { padding: 0 60px 80px; }
+
+  /* SECTION */
+  .section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+    display: none;
+  }
+  .section.active { display: block; }
+
+  .section-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .section-desc { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+  /* PROMPT CARDS */
+  .prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
+    gap: 20px;
+  }
+
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .prompt-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,255,136,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+  .card-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .card-body { padding: 20px; }
+
+  .use-case {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .use-case::before { content: '→'; color: var(--accent); font-family: monospace; }
+
+  .prompt-box {
+    background: var(--code-bg);
+    border: 1px solid #1e2030;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .prompt-box-header {
+    padding: 8px 14px;
+    background: #161b27;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #1e2030;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #f43f5e; }
+  .dot-y { background: #f59e0b; }
+  .dot-g { background: #22c55e; }
+  .prompt-label {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #3d4a5c;
+    letter-spacing: 0.1em;
+  }
+
+  .prompt-text {
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #a9b8cc;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-text .placeholder {
+    color: var(--accent3);
+    font-style: italic;
+  }
+  .prompt-text .keyword { color: var(--accent); }
+  .prompt-text .comment { color: #3d4a5c; }
+
+  .copy-btn {
+    display: flex; align-items: center; gap: 6px;
+    margin: 12px 16px 16px;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: fit-content;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
+
+  /* TIPS BOX */
+  .tip-box {
+    margin: 24px 0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    border-left: 3px solid;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .tip-box.green { background: rgba(0,255,136,0.05); border-color: var(--accent); color: #86efac; }
+  .tip-box.yellow { background: rgba(245,158,11,0.07); border-color: var(--accent3); color: #fde68a; }
+  .tip-box.purple { background: rgba(124,58,237,0.07); border-color: var(--accent2); color: #c4b5fd; }
+  .tip-box.blue { background: rgba(56,189,248,0.07); border-color: var(--blue); color: #bae6fd; }
+  .tip-box strong { display: block; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* TABLE */
+  .ref-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+  .ref-table th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .ref-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .ref-table tr:hover td { background: var(--surface2); }
+  .ref-table code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,255,136,0.08);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* SEARCH */
+  .search-bar {
+    display: flex; align-items: center;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    gap: 10px;
+    margin-bottom: 32px;
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus-within { border-color: var(--accent); }
+  .search-bar svg { color: var(--muted); flex-shrink: 0; }
+  .search-bar input {
+    background: none; border: none; outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; width: 100%;
+  }
+  .search-bar input::placeholder { color: var(--muted); }
+
+  /* TAGS */
+  .tag-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .tag-filter {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: transparent;
+  }
+  .tag-filter:hover { border-color: var(--accent); color: var(--accent); }
+  .tag-filter.active { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 700; }
+
+  /* FOOTER */
+  .footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 13px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 800;
+  }
+  .footer-logo span { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .prompt-card { animation: fadeUp 0.4s ease both; }
+  .prompt-card:nth-child(2) { animation-delay: 0.05s; }
+  .prompt-card:nth-child(3) { animation-delay: 0.1s; }
+  .prompt-card:nth-child(4) { animation-delay: 0.15s; }
+  .prompt-card:nth-child(5) { animation-delay: 0.2s; }
+
+  /* GLOW LINE */
+  .glow-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 40px 0;
+    opacity: 0.3;
+  }
+
+  /* CHAPTER TAG COLORS */
+  .tag-html { background: rgba(244,63,94,0.15); color: #f43f5e; }
+  .tag-css { background: rgba(56,189,248,0.15); color: #38bdf8; }
+  .tag-js { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .tag-react { background: rgba(0,255,136,0.15); color: #00ff88; }
+  .tag-ts { background: rgba(124,58,237,0.15); color: #a78bfa; }
+  .tag-api { background: rgba(251,113,133,0.15); color: #fb7185; }
+  .tag-perf { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .tag-debug { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .tag-arch { background: rgba(192,132,252,0.15); color: #c084fc; }
+
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .main { margin-left: 0; }
+    .hero, .content { padding-left: 24px; padding-right: 24px; }
+    .prompts-grid { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-icon">&lt;/&gt;</div>
+    <div class="logo-text">
+      Web Dev<br>
+      <span class="logo-sub">AI Prompt Book</span>
+    </div>
+  </div>
+
+  <div class="nav-section">Getting Started</div>
+  <a class="nav-item active" onclick="showSection('home')" href="#">
+    <span class="nav-dot"></span> Overview
+  </a>
+  <a class="nav-item" onclick="showSection('tips')" href="#">
+    <span class="nav-dot"></span> Prompting Tips
+  </a>
+
+  <div class="nav-section">Chapters</div>
+  <a class="nav-item" onclick="showSection('html')" href="#">
+    <span class="nav-dot"></span> HTML & Structure <span class="nav-badge">8</span>
+  </a>
+  <a class="nav-item" onclick="showSection('css')" href="#">
+    <span class="nav-dot"></span> CSS & Styling <span class="nav-badge">9</span>
+  </a>
+  <a class="nav-item" onclick="showSection('js')" href="#">
+    <span class="nav-dot"></span> JavaScript & Logic <span class="nav-badge">8</span>
+  </a>
+  <a class="nav-item" onclick="showSection('react')" href="#">
+    <span class="nav-dot"></span> React & Frameworks <span class="nav-badge">8</span>
+  </a>
+  <a class="nav-item" onclick="showSection('api')" href="#">
+    <span class="nav-dot"></span> APIs & Backend <span class="nav-badge">7</span>
+  </a>
+  <a class="nav-item" onclick="showSection('perf')" href="#">
+    <span class="nav-dot"></span> Performance & SEO <span class="nav-badge">7</span>
+  </a>
+  <a class="nav-item" onclick="showSection('debug')" href="#">
+    <span class="nav-dot"></span> Debugging & Review <span class="nav-badge">7</span>
+  </a>
+  <a class="nav-item" onclick="showSection('arch')" href="#">
+    <span class="nav-dot"></span> Architecture & DX <span class="nav-badge">7</span>
+  </a>
+
+  <div class="nav-section">Reference</div>
+  <a class="nav-item" onclick="showSection('cheatsheet')" href="#">
+    <span class="nav-dot"></span> Cheat Sheet
+  </a>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="hero-area">
+    <div class="hero-eyebrow">AI Prompt Book for Web Developers</div>
+    <h1>
+      <span class="line1">Ship Faster.</span>
+      <span class="line2">Build Smarter.</span>
+      <span class="line3">Prompt Better.</span>
+    </h1>
+    <p class="hero-desc">
+      61 production-ready AI prompts crafted specifically for frontend and fullstack web developers. From semantic HTML to system architecture — every prompt is optimized for maximum output quality.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">61</div>
+        <div class="stat-label">Prompts</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Customizable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HOME SECTION -->
+    <div class="section active" id="section-home">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(0,255,136,0.1)">🗺️</div>
+        <div>
+          <div class="section-title">How to Use This Book</div>
+          <div class="section-desc">Your guide to getting the most out of every prompt</div>
+        </div>
+      </div>
+
+      <div class="tip-box green">
+        <strong>💡 The Core Idea</strong>
+        Every prompt here is a template. Replace the <span style="color:var(--accent3)">[bracketed placeholders]</span> with your specific context, then paste into Claude, ChatGPT, Gemini, or any AI tool. The more specific you are, the better the output.
+      </div>
+
+      <table class="ref-table" style="margin-top:28px">
+        <thead>
+          <tr>
+            <th>Chapter</th>
+            <th>What You'll Get</th>
+            <th>Prompts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>🏗️ HTML & Structure</td><td>Semantic markup, accessibility, forms, SEO meta</td><td>8</td></tr>
+          <tr><td>🎨 CSS & Styling</td><td>Layouts, animations, design systems, responsive UI</td><td>9</td></tr>
+          <tr><td>⚡ JavaScript & Logic</td><td>Algorithms, DOM, async, data structures, patterns</td><td>8</td></tr>
+          <tr><td>⚛️ React & Frameworks</td><td>Components, hooks, state management, Next.js</td><td>8</td></tr>
+          <tr><td>🔌 APIs & Backend</td><td>REST, GraphQL, auth, Node.js, database queries</td><td>7</td></tr>
+          <tr><td>🚀 Performance & SEO</td><td>Optimization, Core Web Vitals, meta tags, caching</td><td>7</td></tr>
+          <tr><td>🐛 Debugging & Review</td><td>Code review, bug fixing, refactoring, testing</td><td>7</td></tr>
+          <tr><td>🏛️ Architecture & DX</td><td>System design, folder structure, CI/CD, docs</td><td>7</td></tr>
+        </tbody>
+      </table>
+
+      <div class="glow-line"></div>
+
+      <div class="tip-box purple">
+        <strong>🧠 Pro Strategy: The 4-Part Prompt Formula</strong>
+        Every strong dev prompt has: <b>Role</b> (who the AI is) + <b>Context</b> (what you're building) + <b>Task</b> (what to produce) + <b>Constraints</b> (tech stack, style, limits). Missing any one of these weakens the output significantly.
+      </div>
+    </div>
+
+    <!-- PROMPTING TIPS -->
+    <div class="section" id="section-tips">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(124,58,237,0.15)">🧠</div>
+        <div>
+          <div class="section-title">Prompting Tips for Developers</div>
+          <div class="section-desc">The techniques that separate average prompts from expert-level ones</div>
+        </div>
+      </div>
+
+      <div class="prompts-grid">
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T1</span>
+            <span class="card-title">Always Declare Your Stack</span>
+            <span class="card-tag tag-ts">Essential</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Prevents generic output that doesn't match your environment</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PROMPT PATTERN</span></div>
+              <div class="prompt-text"><span class="keyword">Stack context prefix:</span>
+"I'm using <span class="placeholder">[React 18 / Next.js 14 / TypeScript 5 / Tailwind CSS / Prisma + PostgreSQL]</span>. [Your actual question here]."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T2</span>
+            <span class="card-title">Ask for Multiple Approaches</span>
+            <span class="card-tag tag-js">Strategy</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Get trade-off analysis, not just one solution</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PROMPT PATTERN</span></div>
+              <div class="prompt-text">"Give me <span class="keyword">3 different approaches</span> to solve <span class="placeholder">[problem]</span>. For each: code snippet, time complexity, and when you'd choose it over the others."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T3</span>
+            <span class="card-title">Request Inline Comments</span>
+            <span class="card-tag tag-js">Clarity</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Understand every line, not just copy-paste</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PROMPT PATTERN</span></div>
+              <div class="prompt-text">"Write the code and <span class="keyword">add a comment on every non-trivial line</span> explaining WHY, not just what it does."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T4</span>
+            <span class="card-title">Paste Your Existing Code First</span>
+            <span class="card-tag tag-debug">Context</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">AI output fits your codebase instead of starting from scratch</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PROMPT PATTERN</span></div>
+              <div class="prompt-text">"Here's my existing code:
+<span class="placeholder">[paste code]</span>
+
+<span class="keyword">Extend / refactor / fix this</span> to <span class="placeholder">[goal]</span>. Keep the same coding style and naming conventions."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T5</span>
+            <span class="card-title">Specify Output Format</span>
+            <span class="card-tag tag-arch">Structure</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Get exactly the format you need — no extra fluff</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">PROMPT PATTERN</span></div>
+              <div class="prompt-text">"Return <span class="keyword">only the code</span>, no explanation. Use TypeScript. Export as a named function. Include JSDoc types."</div>
+            </div>
+          </div>
+        </div>
+        <div class="prompt-card">
+          <div class="card-header">
+            <span class="card-num">#T6</span>
+            <span class="card-title">The Critique Loop</span>
+            <span class="card-tag tag-debug">Refinement</span>
+          </div>
+          <div class="card-body">
+            <div class="use-case">Improve any AI-generated code in one follow-up</div>
+            <div class="prompt-box">
+              <div class="prompt-box-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="prompt-label">FOLLOW-UP PATTERN</span></div>
+              <div class="prompt-text">"Now critique this solution. What are its <span class="keyword">3 biggest weaknesses</span> from a production standpoint? Then give me an improved version."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML SECTION -->
+    <div class="section" id="section-html">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(244,63,94,0.1)">🏗️</div>
+        <div>
+          <div class="section-title">HTML & Structure</div>
+          <div class="section-desc">Semantic markup, accessibility, forms, and document structure</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-html"></div>
+    </div>
+
+    <!-- CSS SECTION -->
+    <div class="section" id="section-css">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(56,189,248,0.1)">🎨</div>
+        <div>
+          <div class="section-title">CSS & Styling</div>
+          <div class="section-desc">Layouts, animations, design tokens, and responsive design</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-css"></div>
+    </div>
+
+    <!-- JS SECTION -->
+    <div class="section" id="section-js">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(245,158,11,0.1)">⚡</div>
+        <div>
+          <div class="section-title">JavaScript & Logic</div>
+          <div class="section-desc">Algorithms, async patterns, DOM manipulation, and data processing</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-js"></div>
+    </div>
+
+    <!-- REACT SECTION -->
+    <div class="section" id="section-react">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(0,255,136,0.08)">⚛️</div>
+        <div>
+          <div class="section-title">React & Frameworks</div>
+          <div class="section-desc">Components, hooks, state management, and Next.js patterns</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-react"></div>
+    </div>
+
+    <!-- API SECTION -->
+    <div class="section" id="section-api">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(251,113,133,0.1)">🔌</div>
+        <div>
+          <div class="section-title">APIs & Backend</div>
+          <div class="section-desc">REST, GraphQL, authentication, and server-side logic</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-api"></div>
+    </div>
+
+    <!-- PERFORMANCE SECTION -->
+    <div class="section" id="section-perf">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(34,197,94,0.1)">🚀</div>
+        <div>
+          <div class="section-title">Performance & SEO</div>
+          <div class="section-desc">Core Web Vitals, caching, optimization, and search visibility</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-perf"></div>
+    </div>
+
+    <!-- DEBUG SECTION -->
+    <div class="section" id="section-debug">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(251,146,60,0.1)">🐛</div>
+        <div>
+          <div class="section-title">Debugging & Code Review</div>
+          <div class="section-desc">Bug hunting, refactoring, testing, and quality assurance</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-debug"></div>
+    </div>
+
+    <!-- ARCHITECTURE SECTION -->
+    <div class="section" id="section-arch">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(192,132,252,0.1)">🏛️</div>
+        <div>
+          <div class="section-title">Architecture & Developer Experience</div>
+          <div class="section-desc">System design, project structure, CI/CD, and documentation</div>
+        </div>
+      </div>
+      <div class="prompts-grid" id="prompts-arch"></div>
+    </div>
+
+    <!-- CHEAT SHEET -->
+    <div class="section" id="section-cheatsheet">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(245,158,11,0.1)">📋</div>
+        <div>
+          <div class="section-title">Quick Reference Cheat Sheet</div>
+          <div class="section-desc">The most powerful prompt patterns at a glance</div>
+        </div>
+      </div>
+
+      <table class="ref-table">
+        <thead><tr><th>Situation</th><th>Prompt Opener</th><th>Key Add-on</th></tr></thead>
+        <tbody>
+          <tr><td>Build a component</td><td><code>Act as a senior React developer...</code></td><td>Specify props, TypeScript, Tailwind</td></tr>
+          <tr><td>Fix a bug</td><td><code>Debug this code. List each bug and fix it.</code></td><td>Paste exact error message + stack trace</td></tr>
+          <tr><td>Improve performance</td><td><code>Audit this for performance. Prioritize by impact.</code></td><td>Add your current Lighthouse score</td></tr>
+          <tr><td>Write tests</td><td><code>Write Jest unit tests for this function.</code></td><td>Specify edge cases you want covered</td></tr>
+          <tr><td>Design a system</td><td><code>Design the architecture for [X] at scale.</code></td><td>Give expected user load and constraints</td></tr>
+          <tr><td>Learn a concept</td><td><code>Explain [X] with a real code example.</code></td><td>Add "then give me a quiz question"</td></tr>
+          <tr><td>Write docs</td><td><code>Write JSDoc/README for this code.</code></td><td>Specify audience (junior / senior / external)</td></tr>
+          <tr><td>Code review</td><td><code>Review as a staff engineer at a FAANG company.</code></td><td>Ask for a severity rating per issue</td></tr>
+          <tr><td>Refactor</td><td><code>Refactor for readability and maintainability.</code></td><td>Add "don't change any behavior"</td></tr>
+          <tr><td>Security audit</td><td><code>Find all security vulnerabilities in this code.</code></td><td>Ask for OWASP category per finding</td></tr>
+        </tbody>
+      </table>
+
+      <div class="glow-line"></div>
+
+      <div class="tip-box yellow">
+        <strong>⚡ The Fastest Iteration Loop</strong>
+        1) Generate → 2) "Now critique the solution you just gave" → 3) "Rewrite incorporating your critique" → 4) "What edge cases does this still miss?" → 5) Final version. This 5-step loop consistently produces production-grade code.
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="section-title" style="font-size:20px;margin-bottom:16px">Universal Power Modifiers</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Append any of these to any prompt to instantly improve output quality:</p>
+        <table class="ref-table">
+          <thead><tr><th>Modifier</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td><code>"...and explain your reasoning"</code></td><td>Forces the AI to justify decisions — catches bad assumptions</td></tr>
+            <tr><td><code>"...include error handling"</code></td><td>Production-ready code instead of happy-path only</td></tr>
+            <tr><td><code>"...TypeScript with strict types"</code></td><td>Fully typed output, no 'any' shortcuts</td></tr>
+            <tr><td><code>"...follow SOLID principles"</code></td><td>Architecturally sound, maintainable code</td></tr>
+            <tr><td><code>"...add unit test examples"</code></td><td>Testable code with test cases included</td></tr>
+            <tr><td><code>"...what would you do differently at 10x scale?"</code></td><td>Surfaces scalability considerations</td></tr>
+            <tr><td><code>"...list any assumptions you made"</code></td><td>Exposes hidden requirements you might have missed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-logo">Web Dev <span>AI Prompt Book</span></div>
+    <div>61 prompts · 8 categories · Built for developers</div>
+  </div>
+</div>
+
+<script>
+const promptData = {
+  html: [
+    { num: "#H1", title: "Semantic Page Structure", tag: "tag-html", tagLabel: "Semantic", useCase: "Generate a fully semantic HTML5 page skeleton", prompt: `Act as a senior frontend developer.
+
+Create a fully semantic HTML5 page structure for a [e-commerce product page / blog post / dashboard].
+
+Requirements:
+- Use appropriate landmark elements (header, nav, main, aside, footer)
+- Include ARIA roles where semantic HTML isn't sufficient
+- Add skip-to-content link for keyboard users
+- Meta tags for SEO and Open Graph
+- Structured data (JSON-LD) for [product/article/organization]
+- No div-soup — every element must justify its semantic role` },
+    { num: "#H2", title: "Accessible Form Builder", tag: "tag-html", tagLabel: "a11y", useCase: "Build a WCAG 2.1 AA compliant form", prompt: `Build a fully accessible HTML form for [user registration / checkout / contact].
+
+Fields needed: [list your fields]
+
+Accessibility requirements:
+- Associate all labels with inputs (for/id or aria-labelledby)
+- Add descriptive error messages with aria-describedby
+- Include fieldset/legend for grouped inputs
+- Proper autocomplete attributes
+- Required field indicators that don't rely on color alone
+- Focus-visible styles (do NOT remove outline)
+- Tab order must be logical
+
+Return only the HTML with inline comments explaining each a11y decision.` },
+    { num: "#H3", title: "SEO Meta Tags Generator", tag: "tag-html", tagLabel: "SEO", useCase: "Complete head section for maximum search visibility", prompt: `Write a complete <head> section for a [page type: landing page / blog post / product].
+
+Page details:
+- Title: [your title]
+- Description: [your description]  
+- URL: [your URL]
+- Image: [your OG image URL]
+
+Include:
+- Primary meta tags (title, description, robots)
+- Open Graph (og:title, og:description, og:image, og:type)
+- Twitter Card tags
+- Canonical URL
+- Viewport and charset
+- Preconnect hints for [Google Fonts / CDN]
+- JSON-LD structured data for [Article / Product / Organization]` },
+    { num: "#H4", title: "Responsive Image Markup", tag: "tag-html", tagLabel: "Media", useCase: "Modern picture/srcset patterns for performance", prompt: `Write optimized responsive image markup for [hero image / product gallery / avatar].
+
+Requirements:
+- Use <picture> with WebP source + JPEG fallback
+- srcset for [320px, 640px, 1024px, 1440px] breakpoints
+- sizes attribute that matches my CSS breakpoints: [your breakpoints]
+- Descriptive alt text for: [describe the image]
+- loading="lazy" where appropriate (specify which ones should be eager)
+- width and height attributes to prevent CLS
+- Aspect ratio preservation
+
+Explain the sizes attribute value you chose.` },
+    { num: "#H5", title: "Data Table with Accessibility", tag: "tag-html", tagLabel: "a11y", useCase: "Complex accessible table for screen readers", prompt: `Create an accessible HTML table for [data type: pricing plans / comparison / report].
+
+Columns: [list your columns]
+Has both row and column headers: [yes/no]
+
+Requirements:
+- Correct use of thead/tbody/tfoot
+- scope attributes on all th elements
+- caption element with a descriptive title
+- aria-label on the table element
+- For complex headers: use id/headers association
+- Summary row at bottom if applicable
+- Mobile: explain how to handle with CSS (do not use display:block naively)` },
+    { num: "#H6", title: "Navigation Component", tag: "tag-html", tagLabel: "Nav", useCase: "Keyboard and screen-reader friendly nav", prompt: `Build a semantic navigation component for [primary nav / breadcrumb / pagination].
+
+Structure: [describe your nav items / depth]
+
+Must include:
+- <nav> with aria-label to distinguish multiple navs
+- Current page indicated with aria-current="page"
+- Dropdown submenus: keyboard accessible (Enter to open, Esc to close, arrow keys)
+- Mobile menu toggle: aria-expanded, aria-controls
+- Focus trap in mobile menu when open
+- Visible focus styles on all interactive elements` },
+    { num: "#H7", title: "Dialog / Modal Markup", tag: "tag-html", tagLabel: "ARIA", useCase: "Accessible modal with focus management", prompt: `Write the HTML structure for an accessible modal dialog for [purpose: confirm action / image lightbox / form].
+
+Requirements:
+- Use <dialog> element or role="dialog" if not supported
+- aria-labelledby pointing to modal title
+- aria-describedby for modal body
+- Focus trap: tab cycles only within modal
+- Return focus to trigger element on close
+- Backdrop click to close
+- Escape key to close
+- aria-modal="true"
+
+Include the JavaScript for focus management and show/hide.` },
+    { num: "#H8", title: "Custom SVG Icon System", tag: "tag-html", tagLabel: "SVG", useCase: "Accessible inline SVG icon component pattern", prompt: `Create a reusable inline SVG icon system pattern for a web app.
+
+Icons needed: [list 3-5 icon names]
+
+Requirements:
+- Hidden SVG sprite at top of body (symbol + use pattern)
+- Decorative icons: aria-hidden="true"
+- Meaningful icons: role="img" + aria-label
+- Consistent sizing via CSS custom properties
+- Currentcolor for theming support
+- Show the component HTML, the sprite definition, and the CSS
+- Bonus: show the JavaScript helper function to inject sprites` },
+  ],
+  css: [
+    { num: "#C1", title: "CSS Design Token System", tag: "tag-css", tagLabel: "System", useCase: "Complete design token setup with CSS custom properties", prompt: `Create a comprehensive CSS design token system for a [SaaS app / marketing site / dashboard].
+
+Brand: [describe your brand: modern/minimal, playful, enterprise, etc.]
+Primary color: [hex or description]
+
+Generate tokens for:
+- Color palette (primary, secondary, neutral, semantic: success/warning/error/info)
+- Typography scale (font families, sizes, weights, line heights)
+- Spacing scale (4px base, powers of 2)
+- Border radius scale
+- Shadow scale (4-5 levels)
+- Z-index scale
+- Breakpoints
+- Transition durations and easings
+
+Use CSS custom properties with a --prefix naming convention. Include dark mode via @media (prefers-color-scheme: dark) and a [data-theme="dark"] override.` },
+    { num: "#C2", title: "CSS Grid Layout System", tag: "tag-css", tagLabel: "Layout", useCase: "Complex CSS Grid layout with named areas", prompt: `Build a CSS Grid layout for [dashboard / article layout / card grid / holy grail].
+
+Layout description: [describe the layout: sidebar + main + aside, header + content + footer, etc.]
+
+Requirements:
+- Use named grid areas (grid-template-areas)
+- Responsive: [describe how it should change at mobile/tablet/desktop]
+- Use minmax() and auto-fill/auto-fit where appropriate
+- Subgrid for [cards / form fields] alignment
+- No magic numbers — use CSS custom properties for measurements
+- Include the HTML structure that pairs with this CSS` },
+    { num: "#C3", title: "CSS Animation Library", tag: "tag-css", tagLabel: "Motion", useCase: "Production-ready CSS animations with a11y support", prompt: `Create a set of reusable CSS animations for [page transitions / micro-interactions / loading states / scroll reveals].
+
+Animations needed: [list: fade-in, slide-up, scale-in, skeleton, etc.]
+
+Requirements:
+- Use @keyframes with will-change: transform/opacity only
+- Wrap all animations in @media (prefers-reduced-motion: no-preference) 
+- Provide a safe fallback for reduced-motion users
+- Use CSS custom properties for duration, delay, and easing
+- Utility classes that can be applied declaratively in HTML
+- Staggered animation support via CSS --delay variable` },
+    { num: "#C4", title: "Responsive Typography System", tag: "tag-css", tagLabel: "Type", useCase: "Fluid type scale that works at every viewport", prompt: `Design a fluid responsive typography system using CSS clamp().
+
+Design constraints:
+- Min viewport: 320px, Max viewport: 1440px
+- Body text range: [14px to 18px]
+- Brand fonts: [your fonts or "suggest appropriate Google Fonts pairing"]
+
+Generate:
+- clamp() values for h1 through h6, body, small, caption
+- Line height and letter-spacing per scale step
+- Measure (character width) constraints using ch units
+- @font-face or Google Fonts import
+- Base styles for prose content areas
+- Utility classes for the type scale` },
+    { num: "#C5", title: "Component Styling: Button System", tag: "tag-css", tagLabel: "UI", useCase: "Complete button component with all states and variants", prompt: `Write a complete CSS button component system.
+
+Variants needed: [primary, secondary, ghost, destructive, icon-only]
+Sizes: [sm, md, lg]
+
+Requirements:
+- CSS custom properties for all configurable values
+- States: default, hover, active, focus-visible, disabled, loading
+- Loading state with CSS spinner (no extra HTML)
+- Focus-visible ring using :focus-visible (not :focus)
+- Proper cursor and user-select
+- Prevent layout shift on hover (border included in default state)
+- Dark mode support
+- High contrast mode support (@forced-colors)` },
+    { num: "#C6", title: "CSS Scroll Animation", tag: "tag-css", tagLabel: "Motion", useCase: "Scroll-driven animations using modern CSS", prompt: `Create scroll-driven animations using the CSS @scroll-timeline API and animation-timeline.
+
+Animations to build:
+1. Progress bar that fills as user scrolls the page
+2. Fade-in + slide-up for elements entering the viewport
+3. Parallax effect on hero image
+4. Sticky header that changes style after scrolling past hero
+
+Use modern CSS:
+- animation-timeline: scroll() and view()
+- animation-range for entry/exit thresholds
+- @supports fallback for browsers that don't support it
+- Reduced motion media query wrapping all animations` },
+    { num: "#C7", title: "CSS Container Queries", tag: "tag-css", tagLabel: "Responsive", useCase: "Component-level responsiveness with container queries", prompt: `Refactor this component to use CSS container queries instead of media queries.
+
+[Paste your component HTML + CSS here]
+
+Requirements:
+- Add container-type: inline-size to the appropriate parent
+- Replace all media query breakpoints with @container queries  
+- Name the container (container-name) if multiple nested containers
+- Show the before/after comparison
+- Explain when container queries are better vs media queries for this case
+- Add cqw/cqh units where appropriate for sizing` },
+    { num: "#C8", title: "Dark Mode Implementation", tag: "tag-css", tagLabel: "Theme", useCase: "Robust dark mode with system preference + manual toggle", prompt: `Implement a complete dark mode system for my app.
+
+Current CSS uses: [CSS custom properties / Tailwind / CSS Modules / styled-components]
+
+Requirements:
+- Respect prefers-color-scheme by default
+- Allow manual override stored in localStorage
+- No flash of wrong theme on page load (include the script for this)
+- Smooth transition between modes (but disable for reduced-motion)
+- All color tokens defined for both modes
+- Image handling in dark mode (brightness filter pattern)
+- Show the toggle component HTML/JS
+- Show how to handle third-party component theming` },
+    { num: "#C9", title: "CSS Custom Scrollbar", tag: "tag-css", tagLabel: "UI", useCase: "Beautiful styled scrollbars with cross-browser support", prompt: `Style the scrollbars for [the entire page / a specific overflow container: describe it].
+
+Design: [minimal/thin, colorful, matches brand]
+
+Include:
+- Webkit scrollbar styling (::-webkit-scrollbar family)
+- Firefox scrollbar-width and scrollbar-color
+- Scrollbar gutter to prevent layout shift
+- Hover state on the thumb
+- Dark mode variants
+- A wrapper class so it can be applied selectively
+- Note any limitations (iOS Safari doesn't support custom scrollbars)` },
+  ],
+  js: [
+    { num: "#J1", title: "Async Data Fetching Pattern", tag: "tag-js", tagLabel: "Async", useCase: "Production-ready fetch with loading, error, and cache", prompt: `Write a reusable async data fetching utility in vanilla JavaScript / TypeScript.
+
+Requirements:
+- Generic: works with any endpoint and response type
+- Automatic retry with exponential backoff (max 3 retries)
+- Request cancellation with AbortController
+- Simple in-memory cache with TTL
+- Loading, success, and error states
+- TypeScript generics for the response type
+- Usage example with a real-world API call
+
+Return the utility function, its TypeScript types, and a usage example.` },
+    { num: "#J2", title: "Event Delegation Pattern", tag: "tag-js", tagLabel: "DOM", useCase: "Efficient event handling for dynamic content", prompt: `Explain and implement event delegation for [a dynamic list / table with actions / card grid].
+
+My use case: [describe what happens: e.g., clicking delete buttons on dynamically added list items]
+
+Provide:
+1. The anti-pattern (what NOT to do — addEventListener on each item)
+2. The correct event delegation implementation
+3. How to handle data passing via data-* attributes
+4. TypeScript-typed version
+5. How to properly remove the delegated listener when the parent is removed from DOM` },
+    { num: "#J3", title: "Debounce & Throttle Utilities", tag: "tag-js", tagLabel: "Performance", useCase: "Prevent excessive function calls on user input/scroll", prompt: `Write production-quality debounce and throttle utilities in TypeScript.
+
+For each, provide:
+- The implementation with full TypeScript types
+- Explanation of when to use debounce vs throttle
+- Usage examples for: [search input, scroll handler, resize observer, button click]
+- A version that returns a promise (async debounce)
+- A cancel() method to manually cancel pending calls
+- Unit tests for each (Jest/Vitest)` },
+    { num: "#J4", title: "State Machine Implementation", tag: "tag-js", tagLabel: "Patterns", useCase: "Manage complex component state without libraries", prompt: `Implement a finite state machine in TypeScript for managing [UI state: modal / form wizard / data fetching / auth flow].
+
+States: [list your states: idle, loading, success, error, etc.]
+Events/transitions: [describe what triggers state changes]
+
+Requirements:
+- Type-safe states and events using TypeScript discriminated unions
+- Guard conditions for conditional transitions
+- Entry and exit actions per state
+- No external state management library
+- Show how to connect it to a React component (or vanilla JS)
+- Include a state diagram in comments` },
+    { num: "#J5", title: "Observer Pattern / PubSub", tag: "tag-js", tagLabel: "Patterns", useCase: "Decouple components with an event bus", prompt: `Implement a typed PubSub event bus in TypeScript for a [web app / micro-frontend architecture].
+
+Requirements:
+- Type-safe event names and payloads (no any)
+- subscribe(), publish(), and unsubscribe() methods
+- Once listeners (fire once then auto-remove)
+- Wildcard subscription support
+- Memory leak prevention (auto-cleanup pattern)
+- Show integration example with [React / vanilla JS]
+- Write 3 unit tests` },
+    { num: "#J6", title: "Intersection Observer Utility", tag: "tag-js", tagLabel: "DOM", useCase: "Lazy loading, scroll reveals, infinite scroll", prompt: `Build a reusable Intersection Observer utility for [lazy image loading / scroll-triggered animations / infinite scroll].
+
+My use case: [describe exactly what should happen when elements enter/leave viewport]
+
+Provide:
+- Reusable class or hook wrapping IntersectionObserver
+- Configurable threshold and rootMargin
+- Once (unobserve after first intersection) option
+- TypeScript types
+- Usage with React (custom hook version)
+- Usage with vanilla JS
+- Performance considerations (single observer vs multiple)` },
+    { num: "#J7", title: "Local Storage Manager", tag: "tag-js", tagLabel: "Storage", useCase: "Type-safe, expirable localStorage wrapper", prompt: `Write a type-safe localStorage utility in TypeScript.
+
+Requirements:
+- Generic get/set with TypeScript types (no any)
+- TTL/expiration support per item
+- Automatic JSON serialization/deserialization
+- Error handling for: quota exceeded, JSON parse errors, SSR (no window)
+- Namespace prefix to avoid key collisions
+- Clear all, or clear by prefix
+- React hook wrapper (useLocalStorage)
+- Unit tests including quota-exceeded simulation` },
+    { num: "#J8", title: "Custom Form Validation", tag: "tag-js", tagLabel: "Forms", useCase: "Validation engine without libraries", prompt: `Build a reusable form validation system in TypeScript without using a library like Zod or Yup.
+
+Form: [describe your form fields and rules]
+
+Requirements:
+- Validator functions as pure functions (easy to compose)
+- Schema definition: field name → array of validators
+- validate() returns { valid: boolean, errors: Record<string, string[]> }
+- Built-in validators: required, minLength, maxLength, email, pattern, custom
+- Async validator support (e.g., check if username exists via API)
+- React integration: useFormValidation hook
+- Show complete example with your form` },
+  ],
+  react: [
+    { num: "#R1", title: "Custom Hook Design", tag: "tag-react", tagLabel: "Hooks", useCase: "Extract complex logic into a reusable custom hook", prompt: `Create a custom React hook for [describe functionality: useWindowSize / useMediaQuery / useFetch / useDebounce / useClickOutside].
+
+Requirements:
+- TypeScript with precise types (no any)
+- Handle cleanup in useEffect return function
+- Handle SSR (no window/document on server)
+- Memoize return values appropriately (useCallback/useMemo)
+- Include a usage example in a component
+- Write unit tests using @testing-library/react renderHook
+- Document the hook with JSDoc
+- List edge cases handled` },
+    { num: "#R2", title: "Compound Component Pattern", tag: "tag-react", tagLabel: "Patterns", useCase: "Flexible composable UI components", prompt: `Implement the compound component pattern in React for a [Tabs / Accordion / Select / Modal] component.
+
+Requirements:
+- Context-based state sharing between sub-components
+- TypeScript with proper generic types
+- Export: Component, Component.Item, Component.Trigger, Component.Content
+- Default slot + named slots via render props
+- Controlled and uncontrolled modes (value + defaultValue + onChange)
+- Forward refs on interactive elements
+- Full accessibility (keyboard navigation + ARIA)
+- Usage example showing 3 different compositions` },
+    { num: "#R3", title: "Server Component vs Client Component", tag: "tag-react", tagLabel: "Next.js", useCase: "Decide and implement the right rendering strategy", prompt: `I'm building [describe your feature] in Next.js 14 with the App Router.
+
+Component needs: [list what it does: fetches data, has interactivity, uses browser APIs, etc.]
+
+Tell me:
+1. Which parts should be Server Components vs Client Components
+2. Where to place the "use client" boundary for minimum client JS
+3. Show the implementation with proper data fetching in Server Components
+4. How to pass data from Server to Client Component (serializable props rule)
+5. How to handle loading and error states with loading.tsx and error.tsx
+6. Any streaming/Suspense boundaries I should add` },
+    { num: "#R4", title: "React Performance Optimization", tag: "tag-react", tagLabel: "Performance", useCase: "Identify and fix unnecessary re-renders", prompt: `Here is a React component tree that has performance issues:
+
+[Paste your component code]
+
+Analyze and fix:
+1. Identify all unnecessary re-renders (explain why each happens)
+2. Apply React.memo where appropriate (and explain where NOT to)
+3. Fix with useCallback and useMemo where it matters
+4. Recommend state co-location changes
+5. If applicable: suggest moving to useReducer
+6. Add React DevTools Profiler comments showing what to look for
+7. Write a before/after render count comparison using the React Profiler API` },
+    { num: "#R5", title: "Global State Architecture", tag: "tag-react", tagLabel: "State", useCase: "Design the right state management approach", prompt: `Design the state management architecture for [describe your app: e-commerce cart / dashboard with filters / multi-step form / real-time collaboration tool].
+
+App requirements:
+- [list: user auth, cart, UI state, server state, etc.]
+
+Evaluate and recommend between:
+- Context + useReducer
+- Zustand
+- Jotai
+- Redux Toolkit
+
+For your recommendation:
+- Show the store/context setup
+- Show how 3 different components interact with the state
+- Show optimistic updates for [a specific action]
+- Show persistence (localStorage sync)
+- TypeScript throughout` },
+    { num: "#R6", title: "Data Table Component", tag: "tag-react", tagLabel: "Component", useCase: "Feature-rich table with sorting, filtering, pagination", prompt: `Build a production-ready data table React component in TypeScript.
+
+Data: [describe your data shape or paste the TypeScript interface]
+
+Features needed:
+- Column sorting (client-side + server-side toggle)
+- Text search/filter with debounce
+- Pagination with page size selector
+- Row selection (single / multi) with indeterminate checkbox
+- Column visibility toggle
+- Responsive: horizontal scroll on mobile OR stacked view
+- Loading skeleton state
+- Empty state
+- Export to CSV button
+
+Use TanStack Table (react-table v8) or implement from scratch (specify your preference).` },
+    { num: "#R7", title: "Error Boundary with Recovery", tag: "tag-react", tagLabel: "Resilience", useCase: "Catch runtime errors gracefully with retry logic", prompt: `Build a production-quality React Error Boundary component.
+
+Requirements:
+- Class component (required for componentDidCatch)
+- Wraps children and catches all render errors
+- Custom fallback UI with: error message, stack trace (dev only), retry button
+- Retry resets the error state (increment key to remount children)
+- Error reporting to [Sentry / custom logger — integrate the call]
+- TypeScript with ErrorInfo typing
+- Higher-order component wrapper (withErrorBoundary)
+- React hook (useErrorHandler) for throwing errors from async code into the boundary` },
+    { num: "#R8", title: "Virtualized List Component", tag: "tag-react", tagLabel: "Performance", useCase: "Render 10,000+ items without performance degradation", prompt: `Implement a virtualized list in React for rendering [describe: messages / table rows / card grid] with [estimated count] items.
+
+Options to evaluate:
+1. react-window (FixedSizeList / VariableSizeList)
+2. @tanstack/react-virtual
+3. Vanilla CSS contain + IntersectionObserver (no library)
+
+For your recommended approach:
+- Full implementation with TypeScript
+- Dynamic item heights if needed
+- Scroll to index programmatically
+- Sticky headers/sections
+- Integration with infinite scroll / pagination
+- Keyboard navigation within the list` },
+  ],
+  api: [
+    { num: "#A1", title: "REST API Client", tag: "tag-api", tagLabel: "REST", useCase: "Type-safe API client with interceptors and error handling", prompt: `Build a production-ready REST API client in TypeScript for [your API or "a generic REST API"].
+
+Requirements:
+- Base URL configuration + environment-based switching
+- Request interceptors: attach auth token (Bearer JWT from localStorage/cookie)
+- Response interceptors: handle 401 (refresh token + retry), 403, 500
+- Automatic retry with exponential backoff for network errors
+- Request timeout with AbortController
+- TypeScript generic methods: get<T>(), post<T>(), put<T>(), delete<T>()
+- Error normalization: consistent ApiError class with message, status, code
+- Request/response logging in development
+- Show 3 usage examples with real endpoint shapes` },
+    { num: "#A2", title: "GraphQL Integration", tag: "tag-api", tagLabel: "GraphQL", useCase: "Set up Apollo Client or TanStack Query with GraphQL", prompt: `Set up GraphQL client integration for a [Next.js / React] app using [Apollo Client / urql / TanStack Query + graphql-request].
+
+API: [describe your GraphQL API or "a typical e-commerce GraphQL API"]
+
+Implement:
+- Client configuration with auth headers
+- Code generation setup (GraphQL Code Generator) for type-safe queries
+- A query with variables, loading, and error states
+- A mutation with optimistic updates
+- Cache invalidation after mutation
+- Pagination with cursor-based approach
+- Subscription for real-time updates
+- Error handling for GraphQL errors vs network errors` },
+    { num: "#A3", title: "Authentication Flow", tag: "tag-api", tagLabel: "Auth", useCase: "Complete JWT auth with refresh token rotation", prompt: `Implement a complete JWT authentication flow for a [Next.js / Express + React] app.
+
+Requirements:
+- Login: POST credentials → receive access + refresh token
+- Store access token in memory (not localStorage — explain why)
+- Store refresh token in httpOnly cookie
+- Attach Bearer token to all authenticated requests
+- Silent refresh: intercept 401, call /refresh, retry original request
+- Token rotation: each refresh invalidates old refresh token
+- Logout: clear tokens client and server side
+- Protected route wrapper component
+- Session persistence across page refresh
+- TypeScript types for auth state` },
+    { num: "#A4", title: "React Query / TanStack Query Setup", tag: "tag-api", tagLabel: "Server State", useCase: "Optimal server state management with caching", prompt: `Set up TanStack Query (React Query v5) for my [Next.js / React] app.
+
+APIs I need to integrate: [describe: user data, posts, products, etc.]
+
+Implement:
+- QueryClient configuration (staleTime, gcTime, retry logic)
+- Custom query key factory (type-safe key management)
+- useQuery with select transform to normalize API response
+- useMutation with optimistic update + rollback on error
+- Infinite query for [feed / paginated list]
+- Query invalidation strategy after mutations
+- Prefetching on hover (prefetchQuery)
+- Background refetch on window focus (configure per query)
+- TypeScript throughout with inferred types` },
+    { num: "#A5", title: "Node.js API Route Handler", tag: "tag-api", tagLabel: "Backend", useCase: "Next.js API route or Express handler with validation", prompt: `Write a [Next.js 14 App Router route handler / Express router] for [describe endpoint: POST /api/orders, GET /api/users/:id, etc.].
+
+Requirements:
+- Input validation with Zod schema (validate body, params, query)
+- Authentication middleware (verify JWT)
+- Authorization check (user can only access their own data)
+- Database operation with [Prisma / Drizzle / mongoose] — show the query
+- Error handling: validation errors (400), auth errors (401/403), not found (404), server errors (500)
+- Consistent response format: { data, error, message }
+- TypeScript types for request and response
+- Rate limiting consideration` },
+    { num: "#A6", title: "WebSocket Integration", tag: "tag-api", tagLabel: "Real-time", useCase: "Real-time features with Socket.io or native WebSocket", prompt: `Implement real-time [chat / notifications / live updates / collaborative editing] using [Socket.io / native WebSocket / Server-Sent Events].
+
+Use case details: [describe what data flows in real-time and between whom]
+
+Implement:
+- Server setup with connection handling
+- Client connection with reconnection logic (exponential backoff)
+- Event types with TypeScript discriminated union
+- Authentication for WebSocket connection (verify JWT on connect)
+- Room/channel management for [feature]
+- Optimistic UI update + server confirmation
+- Presence (online/offline indicators)
+- Cleanup: disconnect on component unmount` },
+    { num: "#A7", title: "File Upload Handler", tag: "tag-api", tagLabel: "Files", useCase: "Multipart file upload with preview and progress", prompt: `Build a file upload feature for [profile image / document / multiple images].
+
+Frontend requirements:
+- Drag and drop + click to select
+- File type validation: [allowed types]
+- File size limit: [X MB]
+- Image preview before upload
+- Upload progress bar (XHR or fetch with ReadableStream)
+- Cancel upload in progress
+- Multiple file support with individual status
+
+Backend requirements ([Next.js route / Express]):
+- Parse multipart/form-data (use formidable or built-in)
+- Virus scan hook (describe where to add)
+- Upload to [S3 / Cloudinary / local] — show the integration
+- Return the public URL
+- TypeScript throughout` },
+  ],
+  perf: [
+    { num: "#P1", title: "Core Web Vitals Audit", tag: "tag-perf", tagLabel: "CWV", useCase: "Diagnose and fix LCP, CLS, and INP issues", prompt: `Audit my [Next.js / React] app for Core Web Vitals issues.
+
+Current scores (if known): LCP: [X]s, CLS: [X], INP: [X]ms
+Target: LCP < 2.5s, CLS < 0.1, INP < 200ms
+
+For each metric:
+1. Explain the most common causes
+2. Diagnose based on my site description: [describe your app: image-heavy, lots of dynamic content, third-party scripts, etc.]
+3. Provide specific code fixes with before/after
+4. Add web-vitals library instrumentation to measure in production
+5. Suggest Lighthouse CI thresholds to prevent regression` },
+    { num: "#P2", title: "Next.js Image Optimization", tag: "tag-perf", tagLabel: "Images", useCase: "Eliminate image-related LCP and CLS issues", prompt: `Optimize all images in my Next.js app to improve LCP and eliminate CLS.
+
+Current situation: [describe: using <img> tags / Next Image incorrectly / no width-height on images]
+
+Provide:
+- Correct next/image usage for: hero image (above fold), gallery (below fold), avatar, background
+- How to configure next.config.js domains/remotePatterns
+- priority prop strategy (which images get it, why)
+- Correct sizes prop for responsive images (explain the calculation)
+- placeholder="blur" setup for local and remote images
+- How to handle images from a CMS ([Contentful / Sanity / Strapi])
+- Loading strategy: eager above fold, lazy below fold` },
+    { num: "#P3", title: "Bundle Size Optimization", tag: "tag-perf", tagLabel: "JS Bundle", useCase: "Reduce JavaScript bundle size systematically", prompt: `Help me reduce my JavaScript bundle size. My current bundle is [X KB] total.
+
+Stack: [Next.js / Vite / webpack / Create React App]
+
+Walk me through:
+1. Set up bundle analyzer (next-bundle-analyzer or webpack-bundle-analyzer)
+2. Identify the top 5 culprits in a typical [React SaaS] app
+3. Code splitting strategy: dynamic imports for routes and heavy components
+4. Tree shaking fixes: [common issues with lodash, date-fns, etc.]
+5. Replace heavy libraries: alternatives to [moment.js / lodash / axios]
+6. Third-party script loading: defer / async / partytown strategy
+7. Set a performance budget in CI (fail build if bundle exceeds X KB)` },
+    { num: "#P4", title: "Caching Strategy", tag: "tag-perf", tagLabel: "Caching", useCase: "HTTP caching, service worker, and CDN setup", prompt: `Design a comprehensive caching strategy for my [Next.js / static site / SPA].
+
+Assets to cache: [static assets, API responses, HTML pages, fonts]
+
+Implement:
+- HTTP Cache-Control headers for each asset type (explain each directive)
+- Cache busting strategy for static assets (content hashing)
+- Next.js fetch cache configuration (revalidate, no-store, force-cache)
+- Service Worker with Workbox: cache-first for static, network-first for API
+- CDN configuration recommendations (Vercel / Cloudflare / CloudFront)
+- Stale-while-revalidate pattern for API data
+- Cache invalidation on deployment` },
+    { num: "#P5", title: "SEO Technical Audit", tag: "tag-perf", tagLabel: "SEO", useCase: "Technical SEO checklist implementation", prompt: `Perform a technical SEO audit for my [Next.js / React] website about [describe your site].
+
+Implement fixes for:
+1. Dynamic meta tags per page (title, description, og:image) using Next.js Metadata API
+2. Canonical URLs to prevent duplicate content
+3. Structured data (JSON-LD) for [your content type: Article / Product / FAQ / LocalBusiness]
+4. Sitemap.xml generation (dynamic with all routes)
+5. Robots.txt configuration
+6. Breadcrumb navigation with schema markup
+7. hreflang for multilingual (if applicable)
+8. Noindex for [search results / user-generated / thin content pages]
+9. Internal linking strategy for [your site structure]` },
+    { num: "#P6", title: "Font Loading Optimization", tag: "tag-perf", tagLabel: "Fonts", useCase: "Eliminate font-caused layout shift and slow paint", prompt: `Optimize web font loading to eliminate Flash of Unstyled Text (FOUT) and Cumulative Layout Shift.
+
+Current fonts: [list your fonts and how you're loading them: Google Fonts link / @font-face / next/font]
+
+Implement:
+- next/font/google (or next/font/local) setup with all options explained
+- font-display: swap vs optional — when to use each
+- Preconnect and preload link tags (show the exact markup)
+- System font stack fallback that minimizes layout shift (font-size-adjust)
+- Variable fonts if available for your typeface
+- Self-hosting vs CDN trade-off analysis
+- Size-adjust descriptor to match fallback metrics` },
+    { num: "#P7", title: "React Rendering Performance", tag: "tag-perf", tagLabel: "React", useCase: "Profile and fix slow React renders", prompt: `Profile and fix React rendering performance for my component:
+
+[Paste your slow component or describe the performance issue]
+
+Diagnose:
+1. Add React Profiler API instrumentation to measure render time
+2. Use why-did-you-render to find unexpected re-renders
+3. Identify the root cause (missing memoization / wrong state placement / context thrashing)
+
+Fix with:
+- Correct use of React.memo, useMemo, useCallback
+- State lifting vs pushing down (co-location principle)
+- Context split: separate frequently-changing state into its own context
+- useTransition for non-urgent updates
+- useDeferredValue for expensive derived state
+- Show before/after render count with React DevTools` },
+  ],
+  debug: [
+    { num: "#D1", title: "Code Review: Senior Engineer Mode", tag: "tag-debug", tagLabel: "Review", useCase: "Comprehensive production-readiness review", prompt: `Review this code as a staff-level engineer preparing it for production at a high-traffic app.
+
+[Paste your code here]
+
+Review across 6 dimensions (rate each 1-5 and explain):
+1. **Correctness**: Does it do what it's supposed to? Edge cases?
+2. **Reliability**: Error handling, null checks, boundary conditions
+3. **Performance**: Time/space complexity, unnecessary renders/queries, N+1 problems
+4. **Security**: Input validation, XSS, CSRF, injection, data exposure
+5. **Maintainability**: Naming, complexity, single responsibility, comments
+6. **Testability**: Pure functions, dependency injection, mockability
+
+End with: top 3 must-fix issues and 3 nice-to-haves.` },
+    { num: "#D2", title: "Bug Hunting Assistant", tag: "tag-debug", tagLabel: "Debug", useCase: "Systematic debugging for hard-to-find bugs", prompt: `Help me debug this issue:
+
+**Error / Symptom**: [Describe exactly what's wrong. Paste error message + stack trace]
+**Expected behavior**: [What should happen]
+**Actual behavior**: [What happens instead]
+**Code**: [Paste relevant code]
+**What I've already tried**: [List your attempts]
+**Environment**: [Browser/Node version, OS, framework versions]
+
+Walk me through:
+1. Hypothesis: most likely causes ranked by probability
+2. Diagnostic steps to confirm/rule out each hypothesis
+3. The fix with explanation of WHY it caused the bug
+4. How to write a regression test to prevent this bug returning` },
+    { num: "#D3", title: "Refactoring Legacy Code", tag: "tag-debug", tagLabel: "Refactor", useCase: "Safely modernize old code without breaking behavior", prompt: `Refactor this legacy code to modern standards. Do NOT change behavior.
+
+[Paste legacy code]
+
+Code was written in: [year or describe: class components / var/callback hell / jQuery / vanilla ES5]
+
+Modernize to:
+- ES2022+ syntax (optional chaining, nullish coalescing, async/await, structuredClone)
+- TypeScript with strict types
+- [Functional React components with hooks if applicable]
+- Modern patterns replacing [callbacks → Promises → async/await / class → functions]
+
+For each change:
+- Explain what was changed and why
+- Confirm the behavior is identical
+- Flag any places where behavior MIGHT have changed subtly` },
+    { num: "#D4", title: "Write Unit Tests", tag: "tag-debug", tagLabel: "Testing", useCase: "Comprehensive test coverage for any function/component", prompt: `Write unit tests for the following code using [Jest + React Testing Library / Vitest / Playwright].
+
+[Paste your code / component]
+
+Test coverage must include:
+- Happy path (normal expected behavior)
+- Edge cases: [empty input, null, undefined, empty array, boundary values]
+- Error cases: [what should throw or return error state]
+- Async behavior (mock timers, API calls with MSW)
+- User interaction tests for components (click, type, submit)
+
+Test structure: Arrange → Act → Assert pattern
+Naming: it('should [behavior] when [condition]')
+Mock strategy: explain what to mock and why` },
+    { num: "#D5", title: "TypeScript Error Fixer", tag: "tag-debug", tagLabel: "TypeScript", useCase: "Resolve complex TS errors without using 'any'", prompt: `Fix these TypeScript errors. Do NOT use any, as unknown, or @ts-ignore.
+
+Errors:
+[Paste your TypeScript errors here]
+
+Code:
+[Paste relevant code]
+
+For each error:
+1. Explain in plain English what the error means
+2. Why it's happening (the type system's perspective)
+3. The correct fix with explanation
+4. If multiple fixes are possible, show trade-offs
+
+After fixing, check: are there any remaining type safety gaps I should address?` },
+    { num: "#D6", title: "Security Vulnerability Audit", tag: "tag-debug", tagLabel: "Security", useCase: "Find OWASP Top 10 vulnerabilities in frontend code", prompt: `Perform a security audit on this web application code.
+
+[Paste your code or describe your app's architecture]
+
+Check for (OWASP Top 10 Web):
+1. XSS: unsanitized user input rendered as HTML
+2. Injection: SQL/command injection in API calls
+3. Broken Authentication: JWT storage, session management, token exposure
+4. Sensitive Data Exposure: console.logs, error messages, API keys in frontend
+5. IDOR: can users access other users' data?
+6. CSRF: are state-changing requests protected?
+7. Dependency vulnerabilities: flag any known CVE libraries
+
+For each finding: severity (Critical/High/Medium/Low), OWASP category, and exact fix.` },
+    { num: "#D7", title: "Performance Profiling Assistant", tag: "tag-debug", tagLabel: "Profiling", useCase: "Interpret profiling data and get actionable fixes", prompt: `Help me interpret these performance profiling results and fix the issues.
+
+[Describe or paste: Chrome DevTools Performance tab output / React Profiler flame chart / Lighthouse report]
+
+From the profile, tell me:
+1. What is the most expensive operation (parse, execute, paint, layout)?
+2. Is this a JavaScript execution problem, render problem, or network problem?
+3. The call stack path to the bottleneck function
+4. Specific code changes to fix the top 3 bottlenecks
+5. How to set up continuous performance monitoring to catch regressions
+6. What metrics to track in production (web-vitals, custom performance marks)` },
+  ],
+  arch: [
+    { num: "#AR1", title: "Frontend Architecture Design", tag: "tag-arch", tagLabel: "Architecture", useCase: "Design scalable folder structure and module boundaries", prompt: `Design the frontend architecture for [describe app: SaaS dashboard / e-commerce / social platform] with these requirements:
+
+- Team size: [X developers]
+- Scale: [expected users / complexity]
+- Stack: [Next.js / React + Vite / etc.]
+
+Design and explain:
+1. Folder structure (feature-based vs layer-based — recommend and justify)
+2. Module boundary rules: what can import what
+3. State management layers: local → component → server state
+4. Shared component library strategy
+5. API layer abstraction (where does fetch logic live?)
+6. Environment configuration management
+7. Monorepo consideration (turborepo/nx) for team size
+8. Show the complete folder tree with brief explanation of each directory` },
+    { num: "#AR2", title: "CI/CD Pipeline Setup", tag: "tag-arch", tagLabel: "DevOps", useCase: "GitHub Actions workflow for deploy and quality gates", prompt: `Set up a CI/CD pipeline with GitHub Actions for my [Next.js / React] app deployed to [Vercel / AWS / Netlify].
+
+Pipeline stages needed:
+1. On pull request: lint, type-check, unit tests, build check
+2. On merge to main: run all above + E2E tests + deploy to staging
+3. Manual approval → deploy to production
+
+Include:
+- GitHub Actions YAML (complete, working)
+- Parallel job execution (lint + tests run simultaneously)
+- Cache: node_modules, Next.js build cache
+- Environment secrets management
+- Lighthouse CI performance budget check (fail if LCP > 2.5s)
+- Slack/Discord notification on deployment
+- Automated dependency updates (Dependabot config)` },
+    { num: "#AR3", title: "Micro-Frontend Architecture", tag: "tag-arch", tagLabel: "Micro-FE", useCase: "Module Federation setup for large team/multi-app", prompt: `Design a micro-frontend architecture for [describe: large app being split / multiple teams / legacy migration].
+
+Requirements:
+- [X] teams / applications to integrate
+- Shared: [authentication, design system, routing]
+- Independent: [list the separate apps/features]
+
+Design:
+1. Module Federation with Webpack 5 (host + remote config)
+2. Shared dependency strategy (React version, design system)
+3. Communication between micro-frontends (custom events / shared state)
+4. Authentication: single sign-on across apps
+5. Deployment: independent deploys without coordination
+6. Local development: how does a developer run the full system?
+7. Performance: loading strategy, lazy remotes, error boundaries` },
+    { num: "#AR4", title: "Technical Documentation", tag: "tag-arch", tagLabel: "Docs", useCase: "Generate comprehensive docs for any codebase", prompt: `Generate technical documentation for [this component / this module / this API / this system].
+
+[Paste code or describe the system]
+
+Documentation to generate:
+1. **README**: purpose, quick start, prerequisites, installation
+2. **API Reference**: all exported functions/components with params, return types, examples
+3. **Architecture Decision Records (ADR)**: key decisions and rationale
+4. **Runbook**: how to deploy, rollback, debug common issues
+5. **Contributing guide**: code style, PR process, testing requirements
+
+Format: Markdown. Audience: [new team member / external developer / ops team].
+Assume no prior knowledge of the codebase.` },
+    { num: "#AR5", title: "Database Schema Design", tag: "tag-arch", tagLabel: "Database", useCase: "Design optimal schema with Prisma or Drizzle", prompt: `Design a database schema for [describe your application domain: blog / e-commerce / SaaS with subscriptions / social network].
+
+Requirements:
+- [List key entities and their relationships]
+- Expected data volume: [rows per table]
+- Key queries that must be fast: [list]
+
+Provide:
+- Prisma schema (or Drizzle schema) with all models
+- Relationships: one-to-many, many-to-many with join tables
+- Index strategy for query performance (justify each index)
+- Soft delete pattern where applicable
+- Timestamps (createdAt, updatedAt) pattern
+- Enum definitions
+- Seed data example
+- The top 5 queries this schema needs to serve, written in Prisma syntax` },
+    { num: "#AR6", title: "Monorepo Setup", tag: "tag-arch", tagLabel: "Monorepo", useCase: "Turborepo or Nx workspace with shared packages", prompt: `Set up a monorepo with [Turborepo / Nx] for my [describe: web app + mobile / multiple Next.js apps / design system + app].
+
+Packages to create:
+- apps/web: [Next.js app]
+- apps/[other]: [describe]
+- packages/ui: shared component library
+- packages/config: shared tsconfig, eslint, etc.
+
+Configure:
+- package.json workspace setup (pnpm workspaces preferred)
+- turbo.json pipeline: build depends on upstream, test runs in parallel
+- Shared TypeScript config (base + app-specific extends)
+- Shared ESLint config
+- Changesets for package versioning
+- How apps import from packages (path aliases)
+- CI: only build/test affected packages on PR` },
+    { num: "#AR7", title: "Environment & Config Management", tag: "tag-arch", tagLabel: "Config", useCase: "Secure, validated environment variable setup", prompt: `Set up a robust environment variable management system for my [Next.js / Node.js] app.
+
+Environments: development, staging, production
+Variables needed: [list: API_URL, DATABASE_URL, API_KEYS, FEATURE_FLAGS, etc.]
+
+Implement:
+- Zod schema validation of all env vars at startup (fail fast if missing)
+- Type-safe env object exported from a single config module
+- .env.example with all variables documented (no real values)
+- Public vs secret variable separation (NEXT_PUBLIC_ convention)
+- Local override with .env.local (gitignored)
+- Secrets rotation strategy (never hardcode, use [Vercel secrets / AWS SSM / Doppler])
+- Feature flag pattern using env vars
+- How to add a new env var (process and PR template)` },
+  ],
+};
+
+function renderPromptCards(containerId, prompts) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = prompts.map((p, i) => `
+    <div class="prompt-card" style="animation-delay:${i*0.06}s">
+      <div class="card-header">
+        <span class="card-num">${p.num}</span>
+        <span class="card-title">${p.title}</span>
+        <span class="card-tag ${p.tag}">${p.tagLabel}</span>
+      </div>
+      <div class="card-body">
+        <div class="use-case">${p.useCase}</div>
+        <div class="prompt-box">
+          <div class="prompt-box-header">
+            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+            <span class="prompt-label">COPY PROMPT</span>
+          </div>
+          <div class="prompt-text">${escapeHtml(p.prompt)}</div>
+          <button class="copy-btn" onclick="copyPrompt(this, ${JSON.stringify(p.prompt).replace(/'/g, "&#39;")})">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyPrompt(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Prompt`;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const section = document.getElementById('section-' + id);
+  if (section) section.classList.add('active');
+  event.target.closest('.nav-item').classList.add('active');
+  window.scrollTo({ top: document.querySelector('.content').offsetTop - 20, behavior: 'smooth' });
+}
+
+// Render all sections
+Object.entries(promptData).forEach(([key, prompts]) => {
+  renderPromptCards('prompts-' + key, prompts);
+});
+</script>
+</body>
+</html>
